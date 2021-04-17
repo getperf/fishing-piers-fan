@@ -59,6 +59,34 @@ class Converter():
             return None
 
     @staticmethod
+    def get_header(comment, headers):
+        m = re.search('(天気|水温|潮|入場者数)：(.*)', comment)
+        if m:
+            [item, value] = m.groups()
+            if item == '天気':
+                headers['Weather'] = value
+            elif item == '潮':
+                headers['Tide'] = value
+            elif item == '水温':
+                m2 = re.search('([0-9\.]+)℃', value)
+                if m2:
+                    vals = m2.groups()
+                    headers['WaterTemp'] = float(vals[0])
+            elif item == '入場者数':
+                m2 = re.search('([0-9\.]+)名', value)
+                if m2:
+                    vals = m2.groups()
+                    headers['Quantity'] = float(vals[0])
+
+    @staticmethod
+    def get_date(str):
+        chokaDate = str.replace('\n', '').replace(' ', '')
+        m = re.search('([0-9]+)年([0-9]+)月([0-9]+)日', chokaDate)
+        if m:
+            return parser.parse('/'.join(m.groups()))
+        return None
+
+    @staticmethod
     def makeCommentDict(comment):
         print("TEST")
         # commentDict = {'Comment': comment}

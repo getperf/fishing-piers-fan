@@ -8,25 +8,24 @@ import pkg_resources
 from importlib.resources import read_text
 import importlib
 from piersfan.parser import Parser
+from logging import INFO, ERROR, getLogger
 
-# py.test tests/test_parser.py -v --capture=no -k test_parse
+# logger = getLogger('test')
+
+# py.test tests/test_parser.py -v --capture=no -k test_daikoku_html_parseer
 
 def get_test_data(filename):
     return pkg_resources.resource_filename("tests.resources", filename)
 
-def test_parse():
-    # # test_file = open(
-    # #     pkg_resources.resource_filename('tests.resources','not_found1.html'),'r')
-    # # for line in test_file:
-    # #     print(line)
-    # # print(pkg_resources.resource_filename('tests.resources','not_found1.html'))
-    # # print(read_text("lib2to3", "Grammar.txt"))
-    # # print(read_text("piersfan", "aaa", "Grammar.txt"))
-    # print(">>>End of File")
-    # print(importlib.util.resolve_name("lib2to3", "Grammar.txt"))
-    # print(pkg_resources.resource_filename("piersfan", "not_found1.html"))
-    # print(pkg_resources.resource_filename("tests.resources", "not_found1.html"))
+def test_not_found():
     html_path = get_test_data("not_found1.html")
+    parser = Parser("daikoku", 2021, 4, 9999)
+    parser.parse_html(html_path) == None
+
+def test_daikoku_html_parseer(caplog):
+    # caplog.set_level(INFO)
+
+    html_path = get_test_data("daikoku1.html")
     parser = Parser("daikoku", 2021, 4, 1)
     contents = parser.parse_html(html_path)
     # parser = Parser()
@@ -34,13 +33,13 @@ def test_parse():
     # assert parser.getWaterTemp("【水温】15.3℃") == 15.3
     # assert parser.getWaterTemp("【水温】") == None
 
-def test_getChokaDate():
-    parser = Parser()
-    assert parser.getChokaDate("2021年4月2日( )") == datetime.datetime(2021, 4, 2, 0, 0)
+# def test_getChokaDate():
+#     parser = Parser()
+#     assert parser.getChokaDate("2021年4月2日( )") == datetime.datetime(2021, 4, 2, 0, 0)
 
-def test_convertValue():
-    parser = Parser()
-    assert parser.convertValue("合計 13匹") == 13.0
-    assert parser.convertValue("25～30 cm") == [25, 30]
+# def test_convertValue():
+#     parser = Parser()
+#     assert parser.convertValue("合計 13匹") == 13.0
+#     assert parser.convertValue("25～30 cm") == [25, 30]
 
 

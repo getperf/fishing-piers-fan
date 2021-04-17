@@ -36,17 +36,49 @@ class Parser():
         """
         釣果ホームページのファイルを読み込み、魚種別釣果、コメントのデータフレームに格納する
         """
-        # f = open(html_path, encoding='shift_jis')
-        f = open(html_path, encoding='shift-jis')
+
+        """
+        一部のページに CP51932 (MIXED NL) のコードを使用している。
+        CP51932 は EUC-JP に SJIS-win をミックスしたコード体系となり、
+        Python だとエンコードエラーとなるため、以下 errors='ignore' 
+        でエラーを無視して EUC-JP のみ読み込む
+        """
+        f = open(html_path, encoding='euc_jp', errors='ignore')
         html = f.read()
         f.close()
         soup = BeautifulSoup(html, 'html.parser')
-        contents = soup.find_all(class_="choka")
 
-        # 日別の釣果コンテンツを順に解析する
+        contents = soup.find_all('div', class_="choka")
+        if not contents:
+            return None
+
+        """日別の釣果コンテンツを順に解析する"""
+        choka_date = None
         for content in contents:
-            choka_head = content.find(class_="choka_head")
-            print(choka_head.text)
+            choka_head = content.find('div', class_="choka_head")
+            # print(choka_head.text)
+            if not choka_head:
+                continue
+            choka_date = Converter.get_date(choka_head.text)
+            _logger.info("choka date:", choka_date)
+
+            headers = dict()
+            choka_weather = choka_head.find('span', class_="choka_weather")
+            if choka_weather:
+                Converter.get_header(choka_weather.text, headers)
+            choka_others = choka_head.find_all('span', class_="choka_other")
+            if choka_others:
+                for choka_other in choka_others:
+                    # print("INFO:", choka_other)
+                    Converter.get_header(choka_other.text, headers)
+                _logger.info("魚種別釣果とコメント読込み")
+                _logger.info("header:", headers)
+            else:
+                _logger.info("コメントのみ読込み")
+                _logger.info("header:", headers)
+            # print(len(choka_others))
+            # for choka_other in choka_others:
+            #     print("INFO:", choka_other)
             continue
             chokaTable = content.find_all('tr')
 
