@@ -16,6 +16,13 @@ Description = '''
 '''
 
 _logger = logging.getLogger(__name__)
+# _logger.setLevel(logging.INFO)
+# logging.basicConfig(
+#     level=getattr(logging, 'INFO'),
+#     format='%(asctime)s [%(levelname)s] %(module)s %(message)s',
+#     datefmt='%Y/%m/%d %H:%M:%S',
+# )
+
 
 class Parser():
 
@@ -56,23 +63,45 @@ class Parser():
         choka_date = None
         for content in contents:
             choka_head = content.find('div', class_="choka_head")
-            # print(choka_head.text)
             if not choka_head:
                 continue
             choka_date = Converter.get_date(choka_head.text)
             _logger.info("choka date:", choka_date)
 
-            headers = dict()
+            headers = {'Date': choka_date}
             choka_weather = choka_head.find('span', class_="choka_weather")
             if choka_weather:
                 Converter.get_header(choka_weather.text, headers)
             choka_others = choka_head.find_all('span', class_="choka_other")
             if choka_others:
                 for choka_other in choka_others:
-                    # print("INFO:", choka_other)
                     Converter.get_header(choka_other.text, headers)
                 _logger.info("魚種別釣果とコメント読込み")
+                print("INFO:", headers)
                 _logger.info("header:", headers)
+                rows = content.find_all('tr')
+                df = pd.DataFrame(columns=constants.ChokaHeaders)
+                for row in rows:
+                    values = {}
+                    htmlItems = row.find_all('td')
+                    if not htmlItems:
+                        continue
+                    itemTexts = list(map(lambda x: x.text, htmlItems))
+                    print("ROW:", itemTexts)
+                    # itemTexts.pop(0)
+                    # values['Species'] = itemTexts.pop(0)
+                    # values['Count'] = Converter.getValues(itemTexts.pop(0))
+                    # sizes = Converter.getRangeValues(itemTexts.pop(0))
+                    # if sizes:
+                    #     values['SizeMin'] = sizes[0]
+                    #     values['SizeMax'] = sizes[1]
+                    # weights = Converter.getRangeValues(itemTexts.pop(0))
+                    # if weights:
+                    #     values['WeightMin'] = weights[0]
+                    #     values['WeightMax'] = weights[1]
+                    df= df.append(values, ignore_index=True)
+
+
             else:
                 _logger.info("コメントのみ読込み")
                 _logger.info("header:", headers)
