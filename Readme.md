@@ -1,0 +1,91 @@
+横浜釣果情報検索
+================
+
+cd /c/home/hugo/choka
+
+python -m venv .
+
+pip install beautifulsoup4
+
+C:\home\hugo\choka
+
+要件検討
+-------
+
+釣りビジョン釣果情報サイトにアクセスし、
+指定した釣り場の釣果情報を取得する
+
+* URLで釣り場を指定
+* 気温、当日の状況コメント、魚種別釣果の3種類を保存する
+* 日付をキーにする
+* 結果は CSV に保存
+
+モジュール構成
+--------------
+
+* html ダウンロード、施設ディレクトリ、ページ舞ファイル
+* テキストパース
+* SQLite3 保存
+
+使用方法
+-------
+
+from choka.util import scraper
+
+choka = scraper.get("https://www.fishing-v.jp/choka/choka_detail.php?s=11285")
+print(choka.temp)
+print(choka.comment)
+print(choka.results)
+
+setup.py 準備
+--------------
+
+https://qiita.com/Tadahiro_Yamamura/items/2cbcd272a96bb3761cc8
+
+
+# Installation
+
+Simply run:
+
+    python -m pip install -e .
+
+# 開発環境のインストール
+
+    python -m pip install --force-reinstall --editable .
+
+# Usage
+
+To use it:
+
+    gcbat --help
+
+HTMLダウンロード
+-----------------
+
+大黒
+
+全880件 2018/4/12 ～ 2021/3/30
+
+https://www.fishing-v.jp/choka/choka_detail.php?s=11285&pageID=1
+https://www.fishing-v.jp/choka/choka_detail.php?s=11285&pageID=88
+
+磯子
+
+全963件 2018/3/31 ～ 2021/3/30
+
+https://www.fishing-v.jp/choka/choka_detail.php?s=11286&pageID=1
+https://www.fishing-v.jp/choka/choka_detail.php?s=11286&pageID=97
+
+本牧
+
+全587件
+
+https://www.fishing-v.jp/choka/choka_detail.php?s=11284&pageID=1
+https://www.fishing-v.jp/choka/choka_detail.php?s=11284&pageID=58
+
+dataframe から、json に変換
+
+mkdir data
+cd data
+wget https://www.fishing-v.jp/choka/choka_detail.php?s=11285&pageID=1
+

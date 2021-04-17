@@ -1,0 +1,16 @@
+fire
+numpy
+pandas
+scipy
+requests
+toml
+beautifulsoup4==4.9.3
+openpyxl
+xlrd
+dataset
+matplotlib
+japanize_matplotlib
+datetime
+jpholiday
+seaborn
+pytest
