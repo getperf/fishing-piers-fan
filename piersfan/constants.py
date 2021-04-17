@@ -12,12 +12,12 @@ ChokaDB = 'choka_db.sqlite3'
 
 # 魚種別釣果カラム
 
-ChokaHeaders = ['Date', 'Point', 'Species', 'Count', 'SizeMin', 'SizeMax', 'WeightMin', 'WeightMax', 'Comment', 'Place']
+header_choka = ['Date', 'Point', 'Species', 'Count', 'SizeMin', 'SizeMax', 'WeightMin', 'WeightMax', 'Comment', 'Place']
 
 # コメントカラム
 
-CommentHeaders = ['Date', 'Point', 'Weather', 'WaterTemp', 'Quantity', 'Comment']
+header_comment = ['Date', 'Point', 'Weather', 'WaterTemp', 'Quantity', 'Comment']
 
 # ニュースラインカラム
 
-NewslineHeaders = ['Date', 'Point', 'Comment']
+header_newsline = ['Date', 'Point', 'Comment']

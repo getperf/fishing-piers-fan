@@ -27,7 +27,7 @@ def test_daikoku_html_parseer(caplog):
 
     html_path = get_test_data("daikoku1.html")
     parser = Parser("daikoku", 2021, 4, 1).parse_html(html_path)
-    print(parser.choka_comment)
+    print(parser.comment)
     # parser = Parser()
     # assert parser.getWaterTemp("【水温】14℃") == 14.0
     # assert parser.getWaterTemp("【水温】15.3℃") == 15.3
