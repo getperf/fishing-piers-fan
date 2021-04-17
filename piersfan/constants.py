@@ -16,4 +16,8 @@ ChokaHeaders = ['Date', 'Point', 'Species', 'Count', 'SizeMin', 'SizeMax', 'Weig
 
 # コメントカラム
 
-CommentHeaders = ['Date', 'Point', 'WaterTemp', 'Quantity', 'Comment']
+CommentHeaders = ['Date', 'Point', 'Weather', 'WaterTemp', 'Quantity', 'Comment']
+
+# ニュースラインカラム
+
+NewslineHeaders = ['Date', 'Point', 'Comment']

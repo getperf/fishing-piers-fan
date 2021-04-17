@@ -1,6 +1,7 @@
 import re
 import time
 import logging
+import unicodedata
 import piersfan.constants as constants
 import datetime
 import locale
@@ -17,7 +18,7 @@ class Converter():
     def getWaterTemp(str):
         # 【水温】13.5℃
         waterTemp = str.replace('\n', '').replace(' ', '')
-        m = re.search('([0-9]+\.[0-9]+)', waterTemp)
+        m = re.search(r'([0-9]+\.[0-9]+)', waterTemp)
         if m:
             return float(m.groups()[0])
         m = re.search('([0-9]+)', waterTemp)
@@ -36,13 +37,13 @@ class Converter():
     @staticmethod
     def getRangeValues(str):
         # 25～30 cm
-        m = re.search('([0-9\.]+)～([0-9\.]+)\s*(cm|kg)', str)
+        m = re.search(r'([0-9\.]+)～([0-9\.]+)\s*(cm|kg)', str)
         if m:
             vals = m.groups()
             return [float(vals[0]), float(vals[1])]
 
         # 39  cm
-        m = re.search('([0-9\.]+)\s*(cm|kg)', str)
+        m = re.search(r'([0-9\.]+)\s*(cm|kg)', str)
         if m:
             vals = m.groups()
             return [float(vals[0]), float(vals[0])]
@@ -68,15 +69,50 @@ class Converter():
             elif item == '潮':
                 headers['Tide'] = value
             elif item == '水温':
-                m2 = re.search('([0-9\.]+)℃', value)
+                m2 = re.search(r'([0-9\.]+)℃', value)
                 if m2:
                     vals = m2.groups()
                     headers['WaterTemp'] = float(vals[0])
             elif item == '入場者数':
-                m2 = re.search('([0-9\.]+)名', value)
+                m2 = re.search(r'([0-9\.]+)名', value)
                 if m2:
                     vals = m2.groups()
                     headers['Quantity'] = float(vals[0])
+
+    @staticmethod
+    def get_choka_table_value(comment, values):
+        # comment = comment.strip()
+        comment = unicodedata.normalize("NFKD", comment)
+        m = re.search(r'合計 (\d+) 匹', comment)
+        if m:
+            values['Count'] = int(m.groups()[0])
+            return
+
+        # 25～30 cm
+        m = re.search(r'([0-9\.]+)～([0-9\.]+)\s*(cm|kg)', comment)
+        if m:
+            [min_val, max_val, unit] = m.groups()
+            if unit == 'cm':
+                values['SizeMin'] = min_val
+                values['SizeMax'] = max_val
+            elif unit == 'kg':
+                values['WeightMin'] = min_val
+                values['WeightMax'] = max_val
+            return
+
+        # 39  cm
+        m = re.search(r'([0-9\.]+)\s*(cm|kg)', comment)
+        if m:
+            [val, unit] = m.groups()
+            if unit == 'cm':
+                values['SizeMin'] = val
+                values['SizeMax'] = val
+            elif unit == 'kg':
+                values['WeightMin'] = val
+                values['WeightMax'] = val
+            return
+        return None
+
 
     @staticmethod
     def get_date(str):

@@ -2,6 +2,7 @@ import re
 import os
 import os.path
 import logging
+import unicodedata
 from dateutil import parser
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -26,7 +27,9 @@ _logger = logging.getLogger(__name__)
 
 class Parser():
 
-    chokaData: DataFrame
+    choka_data: DataFrame
+    choka_comment: DataFrame
+    choka_newsline: DataFrame
 
     def __init__(self, point, year, month, page=1):
         """
@@ -36,8 +39,9 @@ class Parser():
         self.year = year
         self.month = month
         self.page = page
-        self.chokaData = pd.DataFrame(columns=constants.ChokaHeaders)
-        self.chokaComments = pd.DataFrame(columns=constants.CommentHeaders)
+        self.choka_data = pd.DataFrame(columns=constants.ChokaHeaders)
+        self.choka_comment = pd.DataFrame(columns=constants.CommentHeaders)
+        self.choka_newsline = pd.DataFrame(columns=constants.NewslineHeaders) 
 
     def parse_html(self, html_path):
         """
@@ -68,93 +72,107 @@ class Parser():
             choka_date = Converter.get_date(choka_head.text)
             _logger.info("choka date:", choka_date)
 
-            headers = {'Date': choka_date}
+            headers = {'Date': choka_date, 'Point': self.point}
             choka_weather = choka_head.find('span', class_="choka_weather")
             if choka_weather:
                 Converter.get_header(choka_weather.text, headers)
+            comment_text = None
+            choka_foot = content.find('div', class_="choka_foot_comment")
+            if choka_foot:
+                comment_text = unicodedata.normalize("NFKD", choka_foot.text)
+
             choka_others = choka_head.find_all('span', class_="choka_other")
             if choka_others:
                 for choka_other in choka_others:
                     Converter.get_header(choka_other.text, headers)
                 _logger.info("魚種別釣果とコメント読込み")
+                headers['Comment'] = comment_text
                 print("INFO:", headers)
                 _logger.info("header:", headers)
+                self.choka_comment = self.choka_comment.append(
+                    headers, ignore_index=True)
                 rows = content.find_all('tr')
                 df = pd.DataFrame(columns=constants.ChokaHeaders)
                 for row in rows:
-                    values = {}
-                    htmlItems = row.find_all('td')
-                    if not htmlItems:
+                    values = {
+                        'Date': choka_date, 
+                        'Point': self.point,
+                    }
+                    th = row.find('th')
+                    if th:
+                        values['Species'] = th.text
+
+                    html_items = row.find_all('td')
+                    if not html_items:
                         continue
-                    itemTexts = list(map(lambda x: x.text, htmlItems))
-                    print("ROW:", itemTexts)
-                    # itemTexts.pop(0)
-                    # values['Species'] = itemTexts.pop(0)
-                    # values['Count'] = Converter.getValues(itemTexts.pop(0))
-                    # sizes = Converter.getRangeValues(itemTexts.pop(0))
-                    # if sizes:
-                    #     values['SizeMin'] = sizes[0]
-                    #     values['SizeMax'] = sizes[1]
-                    # weights = Converter.getRangeValues(itemTexts.pop(0))
-                    # if weights:
-                    #     values['WeightMin'] = weights[0]
-                    #     values['WeightMax'] = weights[1]
-                    df= df.append(values, ignore_index=True)
-
-
+                    item_texts = list(map(lambda x: x.text, html_items))
+                    Converter.get_choka_table_value(item_texts.pop(0), values)
+                    Converter.get_choka_table_value(item_texts.pop(0), values)
+                    print("VALUE:", values)
+                    self.choka_data = self.choka_data.append(
+                        values, ignore_index=True)
             else:
+                values = {
+                    'Date': choka_date, 
+                    'Point': self.point,
+                    'Comment': comment_text,
+                }
+                self.choka_newsline = self.choka_newsline.append(
+                    values, ignore_index=True)
                 _logger.info("コメントのみ読込み")
                 _logger.info("header:", headers)
-            # print(len(choka_others))
-            # for choka_other in choka_others:
-            #     print("INFO:", choka_other)
-            continue
-            chokaTable = content.find_all('tr')
+        # print(self.choka_comment)
+        return self
+            # # print(len(choka_others))
+            # # for choka_other in choka_others:
+            # #     print("INFO:", choka_other)
+            # continue
+            # chokaTable = content.find_all('tr')
 
-            # 魚種別釣果テーブルの抽出
-            # 入力例 1:タコ
-            #        2: 合計 2匹
-            #        3:25～30 cm
-            #        4:0.8～1 kg
-            columns = constants.ChokaHeaders
-            df = pd.DataFrame(columns=columns)
-            for row in chokaTable:
-                values = {}
-                htmlItems = row.find_all('td')
-                if not htmlItems:
-                    continue
-                itemTexts = list(map(lambda x: x.text, htmlItems))
-                itemTexts.pop(0)
-                values['Species'] = itemTexts.pop(0)
-                values['Count'] = Converter.getValues(itemTexts.pop(0))
-                sizes = Converter.getRangeValues(itemTexts.pop(0))
-                if sizes:
-                    values['SizeMin'] = sizes[0]
-                    values['SizeMax'] = sizes[1]
-                weights = Converter.getRangeValues(itemTexts.pop(0))
-                if weights:
-                    values['WeightMin'] = weights[0]
-                    values['WeightMax'] = weights[1]
-                df = df.append(values, ignore_index=True)
+            # # 魚種別釣果テーブルの抽出
+            # # 入力例 1:タコ
+            # #        2: 合計 2匹
+            # #        3:25～30 cm
+            # #        4:0.8～1 kg
+            # columns = constants.ChokaHeaders
+            # df = pd.DataFrame(columns=columns)
+            # for row in chokaTable:
+            #     values = {}
+            #     htmlItems = row.find_all('td')
+            #     if not htmlItems:
+            #         continue
+            #     itemTexts = list(map(lambda x: x.text, htmlItems))
+            #     itemTexts.pop(0)
+            #     values['Species'] = itemTexts.pop(0)
+            #     values['Count'] = Converter.getValues(itemTexts.pop(0))
+            #     sizes = Converter.getRangeValues(itemTexts.pop(0))
+            #     if sizes:
+            #         values['SizeMin'] = sizes[0]
+            #         values['SizeMax'] = sizes[1]
+            #     weights = Converter.getRangeValues(itemTexts.pop(0))
+            #     if weights:
+            #         values['WeightMin'] = weights[0]
+            #         values['WeightMax'] = weights[1]
+            #     df = df.append(values, ignore_index=True)
 
-            # 水温, 日付、コメントの抽出
-            color = content.find(class_="color")
-            waterTemp = Converter.getWaterTemp(color.text)
-            chokaDate = Converter.getChokaDate(choka_head.text)
-            df['Point'] = chokaPoint
-            df['Date'] = chokaDate
-            _logger.info("run : {},{}".format(chokaPoint, chokaDate))
-            self.chokaData = self.chokaData.append(df)
-            commentText = ''
-            chokaComment = content.find(class_="choka_comment")
-            if chokaComment:
-                commentText = chokaComment.text
-            commentDict = Converter.makeCommentDict(commentText)
-            commentDict['WaterTemp'] = waterTemp
-            commentDict['Date'] = chokaDate
-            commentDict['Point'] = chokaPoint
-            self.chokaComments = self.chokaComments.append(commentDict,
-                                                           ignore_index=True)
+            # # 水温, 日付、コメントの抽出
+            # color = content.find(class_="color")
+            # waterTemp = Converter.getWaterTemp(color.text)
+            # chokaDate = Converter.getChokaDate(choka_head.text)
+            # df['Point'] = chokaPoint
+            # df['Date'] = chokaDate
+            # _logger.info("run : {},{}".format(chokaPoint, chokaDate))
+            # self.chokaData = self.chokaData.append(df)
+            # commentText = ''
+            # chokaComment = content.find(class_="choka_comment")
+            # if chokaComment:
+            #     commentText = chokaComment.text
+            # commentDict = Converter.makeCommentDict(commentText)
+            # commentDict['WaterTemp'] = waterTemp
+            # commentDict['Date'] = chokaDate
+            # commentDict['Point'] = chokaPoint
+            # self.chokaComments = self.chokaComments.append(commentDict,
+            #                                                ignore_index=True)
 
     def run(self):
         """
