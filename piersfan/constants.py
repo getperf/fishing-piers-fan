@@ -1,6 +1,6 @@
 # フィッシングTV釣果情報ホームページURL
 
-UrlFishingTv = "https://www.fishing-v.jp/choka/choka_detail.php?s={}&pageID={}"
+UrlFishingPiers = "https://www.fishing-v.jp/choka/choka_detail.php?s={}&pageID={}"
 
 # HTMLダウンロードファイル保存場所
 
@@ -12,7 +12,7 @@ ChokaDB = 'choka_db.sqlite3'
 
 # 魚種別釣果カラム
 
-ChokaHeaders = ['Species', 'Count', 'SizeMin', 'SizeMax', 'WeightMin', 'WeightMax', 'Comment', 'Place']
+ChokaHeaders = ['Date', 'Point', 'Species', 'Count', 'SizeMin', 'SizeMax', 'WeightMin', 'WeightMax', 'Comment', 'Place']
 
 # コメントカラム
 

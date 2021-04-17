@@ -5,40 +5,50 @@ import logging
 from dateutil import parser
 import pandas as pd
 from bs4 import BeautifulSoup
+from pandas import DataFrame
+
 import piersfan.constants as constants
 from piersfan.converter import Converter
 
-Description='''
+Description = '''
 釣りビジョン釣果情報ホームページから釣果を取得する。取得情報は、
 水温、コメント、魚種別釣果の3種
 '''
 
+_logger = logging.getLogger(__name__)
+
 class Parser():
 
-    def __init__(self, point, year, month, page = 1):
+    chokaData: DataFrame
+
+    def __init__(self, point, year, month, page=1):
         """
         魚種別釣果、コメントのデータフレームを初期化
-
         """
-        self.chokaData = pd.DataFrame()
+        self.point = point
+        self.year = year
+        self.month = month
+        self.page = page
+        self.chokaData = pd.DataFrame(columns=constants.ChokaHeaders)
         self.chokaComments = pd.DataFrame(columns=constants.CommentHeaders)
 
-    def parseHtml(self, htmlPath, chokaPoint, chokaPage):
+    def parse_html(self, html_path):
         """
         釣果ホームページのファイルを読み込み、魚種別釣果、コメントのデータフレームに格納する
-
         """
-        _logger = logging.getLogger(__name__)
-        f = open(htmlPath)
+        # f = open(html_path, encoding='shift_jis')
+        f = open(html_path, encoding='shift-jis')
         html = f.read()
         f.close()
         soup = BeautifulSoup(html, 'html.parser')
-        chokaContents = soup.find_all(class_="choka_box")
+        contents = soup.find_all(class_="choka")
 
         # 日別の釣果コンテンツを順に解析する
-        for chokaContent in chokaContents:
-            chokaInfo = chokaContent.find(class_="choka_info")
-            chokaTable = chokaContent.find_all('tr')
+        for content in contents:
+            choka_head = content.find(class_="choka_head")
+            print(choka_head.text)
+            continue
+            chokaTable = content.find_all('tr')
 
             # 魚種別釣果テーブルの抽出
             # 入力例 1:タコ
@@ -64,18 +74,18 @@ class Parser():
                 if weights:
                     values['WeightMin'] = weights[0]
                     values['WeightMax'] = weights[1]
-                df= df.append(values, ignore_index=True)
+                df = df.append(values, ignore_index=True)
 
             # 水温, 日付、コメントの抽出
-            color = chokaContent.find(class_="color")
+            color = content.find(class_="color")
             waterTemp = Converter.getWaterTemp(color.text)
-            chokaDate = Converter.getChokaDate(chokaInfo.text) 
+            chokaDate = Converter.getChokaDate(choka_head.text)
             df['Point'] = chokaPoint
             df['Date'] = chokaDate
             _logger.info("run : {},{}".format(chokaPoint, chokaDate))
             self.chokaData = self.chokaData.append(df)
             commentText = ''
-            chokaComment = chokaContent.find(class_="choka_comment")
+            chokaComment = content.find(class_="choka_comment")
             if chokaComment:
                 commentText = chokaComment.text
             commentDict = Converter.makeCommentDict(commentText)
@@ -83,7 +93,7 @@ class Parser():
             commentDict['Date'] = chokaDate
             commentDict['Point'] = chokaPoint
             self.chokaComments = self.chokaComments.append(commentDict,
-                ignore_index=True)
+                                                           ignore_index=True)
 
     def run(self):
         """
@@ -96,7 +106,7 @@ class Parser():
         for root, dirs, files in os.walk(template_dir):
             for file in files:
                 m = re.match('choka_(.+)_(\d+)\.html$', file)
-                if  m:
+                if m:
                     chokaInfo = m.groups()
                     html = os.path.join(root, file)
                     self.parseHtml(html, chokaInfo[0], chokaInfo[1])
