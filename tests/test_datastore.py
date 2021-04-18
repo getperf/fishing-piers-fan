@@ -5,7 +5,7 @@ from piersfan.config import Config
 from piersfan.datastore import Datastore
 from piersfan.parser import Parser
 
-# py.test tests/test_datastore.py -v --capture=no -k test_reset_loadfile
+# py.test tests/test_datastore.py -v --capture=no -k test_get_choka_db
 
 TEST_DB = 'test_fishing_result.db'
 
@@ -15,6 +15,8 @@ def test_init():
     db_path = Config.get_data_path(TEST_DB)
     assert not os.path.exists(db_path)
 
+def test_get_choka_db():
+    print( Config.get_choka_db())
 
 def test_reset_loadfile():
     datastore = Datastore(TEST_DB).reset_load_files()

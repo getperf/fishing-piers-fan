@@ -20,6 +20,10 @@ ChokaDB = 'fishing_result.sqlite3'
 
 CrawlInterval = 5
 
+# 釣果サイトページネーションの最大ページ数
+
+MaxPage = 1000
+
 # 魚種別釣果カラム
 
 header_choka = ['Date', 'Point', 'Species', 'Count', 'SizeMin', 'SizeMax', 'WeightMin', 'WeightMax', 'Comment', 'Place']
@@ -53,4 +57,12 @@ class Config:
 
     @staticmethod
     def get_url(area_name):
-        return UrlFishingPiers.formant(area_name)
+        return UrlFishingPiers.format(area_name)
+
+    @staticmethod
+    def get_download_file(area_name, year, month, page=1):
+        return 'choka_{}_{}_{:0=2}_{:0=3}.html'.format(area_name, year, month, page)
+
+    @staticmethod
+    def get_choka_db():
+        return Config._get_path("data", ChokaDB)

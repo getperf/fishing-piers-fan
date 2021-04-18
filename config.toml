@@ -1,24 +1,20 @@
 # 釣果情報ホームページを巡回する時のスリープ時間(秒)
 # interval = 5
 
+# 釣果サイトページ巡回の最大ページ数
+# max_page = 1000
+
 # 巡回する釣果情報ポイントホームページのリスト、
-# https://www.fishing-v.jp/choka/choka_detail.php?s={id}"
-# で表示させるURL パラメータの各ポイント id を指定する
+# http://{施設名}.yokohama-fishingpiers.jp/choka.phpで表示させるURLを指定する
 [[area]]
 
-name = 'Daikoku'
-id = 11285
-last_page = 88
+name = 'daikoku'
 
 [[area]]
 
-name = 'Isogo'
-id = 11286
-last_page = 97
+name = 'isogo'
 
 [[area]]
 
-name = 'Honmoku'
-id = 11284
-last_page = 58
+name = 'honmoku'
 

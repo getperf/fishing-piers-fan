@@ -10,9 +10,9 @@ class Cli(object):
     横浜フィッシングピアースの釣果情報を取得する。
     '''
 
-    def download(self, configFile="config.toml", point = '', lastdays = 90):
+    def download(self, config="config.toml", month=0):
         """釣りビジョンホームページから釣果ページHTMLをダウンロードする"""
-        return Loader().load_config(configFile).run()
+        return Download().load_config(config).run(month)
 
     def parse(self):
         """ダウンロードしたHTMLから釣果情報を抽出し、CSVファイルに保存する"""
