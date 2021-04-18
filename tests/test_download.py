@@ -26,7 +26,7 @@ def test_getFormData():
 
 def test_getDownloadFile():
     download = Download()
-    assert download.getDownloadFile('daikoku', 2021, 3, 1) == 'choka_daikoku_2021_03_001.html'
+    assert download.get_download_file('daikoku', 2021, 3, 1) == 'choka_daikoku_2021_03_001.html'
 
 def test_download():
     download = Download()

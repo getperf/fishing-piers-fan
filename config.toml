@@ -1,5 +1,5 @@
 # 釣果情報ホームページを巡回する時のスリープ時間(秒)
-interval = 5
+# interval = 5
 
 # 巡回する釣果情報ポイントホームページのリスト、
 # https://www.fishing-v.jp/choka/choka_detail.php?s={id}"

@@ -1,26 +1,28 @@
 import os
 import logging
-import pkg_resources
 import pandas as pd
 import dataset as ds
-from sqlalchemy import inspect
+from piersfan import config
+from piersfan.config import Config
 
 Description = '''
 SQLite3を用いて釣果情報を管理します。
 釣りビジョン釣果情報ホームページから釣果を取得した、csv データをインポートします。
 '''
 
-class Table():
+
+class Table:
     def __init__(self, table_name, index_columns, csv):
         self.table_name = table_name
         self.index_columns = index_columns
         self.csv = csv
 
-class Datastore():
-    def __init__(self, db_name = 'fishing_result.db'):
-        db = ds.connect('sqlite:///data/{}'.format(db_name))
+
+class Datastore:
+    def __init__(self, db_name=config.ChokaDB):
+        db = ds.connect('sqlite:///{}/{}'.format(config.DataDir, db_name))
         self.db = db
-        self.db_path = pkg_resources.resource_filename("data", db_name)
+        self.db_path = Config.get_data_path(db_name)
         self.tables = [
             Table('fishing_results', ['Date', 'Point', 'Species'], 'choka.csv'),
             Table('fishing_comments', ['Date', 'Point'], 'comment.csv'),
@@ -29,18 +31,15 @@ class Datastore():
         self.load_counts = dict()
         logging.getLogger(__name__).info("database created")
 
-    def export_path(self, filename):
-        return pkg_resources.resource_filename("data", filename)
-
-    def reset_loadfile(self, filename):
-        load_path = self.export_path(filename)
+    def reset_load_file(self, filename):
+        load_path = Config.get_data_path(filename)
         if os.path.exists(load_path):
             os.remove(load_path)
         self.load_counts[filename] = 0
 
-    def reset_loadfiles(self):
+    def reset_load_files(self):
         for table in self.tables:
-            self.reset_loadfile(table.csv)
+            self.reset_load_file(table.csv)
         return self
 
     def reset_database(self):
@@ -56,7 +55,7 @@ class Datastore():
             self.create_index(table.table_name, table.index_columns)
 
     def initial_load(self, csv, table_name):
-        results = pd.read_csv(self.export_path(csv), index_col = 0)
+        results = pd.read_csv(Config.get_data_path(csv), index_col=0)
         print(results.columns)
         results.to_sql(table_name, self.db.engine, if_exists="replace")
         self.load_counts[csv] = len(results.index)
@@ -69,7 +68,7 @@ class Datastore():
         logging.getLogger(__name__).info("loaded")
         self.create_indexes()
 
-    def regist_row(self, table_name, index_columns, values):
+    def upsert_row(self, table_name, index_columns, values):
         table = self.db[table_name]
         keys = dict()
         for index_column in index_columns:
@@ -80,9 +79,9 @@ class Datastore():
             table.insert(values)
 
     def append_load(self, csv, table_name, index_columns):
-        results = pd.read_csv(self.export_path(csv), index_col = 0)
+        results = pd.read_csv(Config.get_data_path(csv), index_col=0)
         for result in results.to_dict(orient='records'):
-            self.regist_row(table_name, index_columns, result)
+            self.upsert_row(table_name, index_columns, result)
         self.load_counts[csv] = len(results.index)
         return self
 

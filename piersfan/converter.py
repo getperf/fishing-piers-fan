@@ -1,22 +1,19 @@
 import re
-import time
-import logging
 import unicodedata
-import piersfan.constants as constants
 from datetime import datetime
-import locale
 from dateutil import parser
 
-Description='''
+Description = '''
 釣りビジョンフィッシングピアース釣果情報ホームページから釣果を取得する。
 HTML 要素を解析して変換する。
 '''
 
-class Converter():
+
+class Converter:
 
     @staticmethod
     def get_header(comment, headers):
-        m = re.search('(天気|水温|潮|入場者数)：(.*)', comment)
+        m = re.search(r'(天気|水温|潮|入場者数)：(.*)', comment)
         if m:
             [item, value] = m.groups()
             if item == '天気':
@@ -24,19 +21,18 @@ class Converter():
             elif item == '潮':
                 headers['Tide'] = value
             elif item == '水温':
-                m2 = re.search(r'([0-9\.]+)℃', value)
+                m2 = re.search(r'([0-9.]+)℃', value)
                 if m2:
-                    vals = m2.groups()
-                    headers['WaterTemp'] = float(vals[0])
+                    values = m2.groups()
+                    headers['WaterTemp'] = float(values[0])
             elif item == '入場者数':
-                m2 = re.search(r'([0-9\.]+)名', value)
+                m2 = re.search(r'([0-9.]+)名', value)
                 if m2:
-                    vals = m2.groups()
-                    headers['Quantity'] = float(vals[0])
+                    values = m2.groups()
+                    headers['Quantity'] = float(values[0])
 
     @staticmethod
     def get_choka_table_value(comment, values):
-        # comment = comment.strip()
         comment = unicodedata.normalize("NFKD", comment)
         m = re.search(r'合計 (\d+) 匹', comment)
         if m:
@@ -44,7 +40,7 @@ class Converter():
             return
 
         # 25～30 cm
-        m = re.search(r'([0-9\.]+)～([0-9\.]+)\s*(cm|kg)', comment)
+        m = re.search(r'([0-9.]+)～([0-9.]+)\s*(cm|kg)', comment)
         if m:
             [min_val, max_val, unit] = m.groups()
             if unit == 'cm':
@@ -56,7 +52,7 @@ class Converter():
             return
 
         # 39  cm
-        m = re.search(r'([0-9\.]+)\s*(cm|kg)', comment)
+        m = re.search(r'([0-9.]+)\s*(cm|kg)', comment)
         if m:
             [val, unit] = m.groups()
             if unit == 'cm':
@@ -68,11 +64,10 @@ class Converter():
             return
         return None
 
-
     @staticmethod
-    def get_date(str):
-        chokaDate = str.replace('\n', '').replace(' ', '')
-        m = re.search('([0-9]+)年([0-9]+)月([0-9]+)日', chokaDate)
+    def get_date(comment):
+        choka_date = comment.replace('\n', '').replace(' ', '')
+        m = re.search('([0-9]+)年([0-9]+)月([0-9]+)日', choka_date)
         if m:
             return parser.parse('/'.join(m.groups()))
         return None
@@ -85,11 +80,6 @@ class Converter():
         comments['Comment'] = text
         m = re.search(r'\(.+?([0-9]+):([0-9]+)\)', text)
         if m:
-            # comments['Time'] = m.groups()[0]
-            # comments['Time'] = parser.parse(':'.join(m.groups()))
-            time = datetime.strptime(':'.join(m.groups()),"%H:%M")
+            time = datetime.strptime(':'.join(m.groups()), "%H:%M")
             date = comments['Date']
-            comments['Time'] = datetime.combine(date.date(),time.time())
-
-            # print(comments['Date'] + datetime.strptime(':'.join(m.groups()),"%H:%M"))
-            # comments['Time'] = datetime.strptime(':'.join(m.groups()),"%H:%M")
+            comments['Time'] = datetime.combine(date.date(), time.time())

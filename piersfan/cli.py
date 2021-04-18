@@ -12,7 +12,7 @@ class Cli(object):
 
     def download(self, configFile="config.toml", point = '', lastdays = 90):
         """釣りビジョンホームページから釣果ページHTMLをダウンロードする"""
-        return Loader().loadConfig(configFile).run()
+        return Loader().load_config(configFile).run()
 
     def parse(self):
         """ダウンロードしたHTMLから釣果情報を抽出し、CSVファイルに保存する"""

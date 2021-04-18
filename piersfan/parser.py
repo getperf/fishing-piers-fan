@@ -2,13 +2,12 @@ import logging
 import os
 import os.path
 import re
-import unicodedata
-import pkg_resources
 import pandas as pd
 from bs4 import BeautifulSoup
 from pandas import DataFrame
 
-import piersfan.constants as constants
+import piersfan.config as config
+from piersfan.config import Config
 from piersfan.converter import Converter
 
 Description = '''
@@ -32,9 +31,9 @@ class Parser():
         self.year = year
         self.month = month
         self.page = page
-        self.choka = pd.DataFrame(columns=constants.header_choka)
-        self.comment = pd.DataFrame(columns=constants.header_comment)
-        self.newsline = pd.DataFrame(columns=constants.header_newsline)
+        self.choka = pd.DataFrame(columns=config.header_choka)
+        self.comment = pd.DataFrame(columns=config.header_comment)
+        self.newsline = pd.DataFrame(columns=config.header_newsline)
 
     def parse_html(self, html_path):
         """
@@ -42,7 +41,7 @@ class Parser():
         """
 
         """
-        一部のページに CP51932 (MIXED NL) のコードを使用している。
+        一部のダウンロードページに CP51932 (MIXED NL) のコードが含まれる。
         CP51932 は EUC-JP に SJIS-win をミックスしたコード体系となり、
         Python だとエンコードエラーとなるため、以下 errors='ignore' 
         でエラーを無視して EUC-JP のみ読み込む
@@ -83,7 +82,7 @@ class Parser():
                 self.comment = self.comment.append(headers, ignore_index=True)
 
                 rows = content.find_all('tr')
-                df = pd.DataFrame(columns=constants.header_choka)
+                df = pd.DataFrame(columns=config.header_choka)
                 for row in rows:
                     values = {'Date': choka_date, 'Point': self.point, 'Species': row.find('th').text}
                     html_items = row.find_all('td')
@@ -114,7 +113,7 @@ class Parser():
         return timestamps
 
     def export_data(self, df, filename, format='csv'):
-        export_path = pkg_resources.resource_filename("data", filename)
+        export_path = Config.get_data_path(filename)
         df.to_csv(export_path)
 
     def export(self, format='csv'):
@@ -133,7 +132,7 @@ class Parser():
         釣果情報を抽出して、CSV 形式にして保存する
 
         """
-        template_dir = os.path.join(constants.DownloadDir)
+        template_dir = os.path.join(config.DownloadDir)
         parseCount = 0
         for root, dirs, files in os.walk(template_dir):
             for file in files:
