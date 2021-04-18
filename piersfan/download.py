@@ -8,6 +8,7 @@ import pandas as pd
 import toml
 import urllib
 import os.path
+import pkg_resources
 
 Description='''
 横浜フィッシングピアースの釣果情報ホームページをダウンロードする
@@ -15,7 +16,8 @@ Description='''
 
 UrlFishingPiers = "http://{}.yokohama-fishingpiers.jp/choka.php"
 CrawlInterval = 5
-DownloadDir = 'data'
+DownloadDir = 'download'
+# pkg_resources.resource_filename("download")
 
 class Download():
 
@@ -49,7 +51,7 @@ class Download():
             f.write(data)
         print("download area:{}, date:{}/{}, page:{}".format(areaName, year, month, page))
 
-    def run(self):
+    def run(self, last_month = 3):
         for area in self.choka['area']:
             areaName = area['name']
             areaId = area['id']

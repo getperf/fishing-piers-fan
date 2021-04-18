@@ -3,6 +3,7 @@ import os
 import os.path
 import re
 import unicodedata
+import pkg_resources
 import pandas as pd
 from bs4 import BeautifulSoup
 from pandas import DataFrame
@@ -55,27 +56,30 @@ class Parser():
         if not contents:
             return None
 
-        """日別の釣果コンテンツを順に解析する"""
+        """釣果コンテンツを順に解析する"""
         for content in contents:
             content_header = content.find('div', class_="choka_head")
             if not content_header:
                 continue
             choka_date = Converter.get_date(content_header.text)
 
-            content_weather = content_header.find('span', class_="choka_weather")
-            comment_text = None
-            content_foot = content.find('div', class_="choka_foot_comment")
-            if content_foot:
-                comment_text = unicodedata.normalize("NFKD", content_foot.text)
+            content_weather = content_header.find('span', 
+                class_="choka_weather")
+            content_foot = content.find('div', 
+                class_="choka_foot_comment")
+            content_others = content_header.find_all('span', 
+                class_="choka_other")
 
-            content_others = content_header.find_all('span', class_="choka_other")
             if content_others:
-                headers = dict(Date=choka_date, Point=self.point, Comment=comment_text)
+                """終了記事を解析し、ヘッダと魚種別釣果を抽出"""
+                headers = dict(Date=choka_date, Point=self.point)
+                Converter.get_comment(content_foot.text, headers)
+
                 if content_weather:
                     Converter.get_header(content_weather.text, headers)
                 for content_other in content_others:
                     Converter.get_header(content_other.text, headers)
-                _logger.info("魚種別釣果とコメント読込み", headers)
+                _logger.info("魚種別釣果コメント読込み", headers)
                 self.comment = self.comment.append(headers, ignore_index=True)
 
                 rows = content.find_all('tr')
@@ -89,10 +93,39 @@ class Parser():
                     Converter.get_choka_table_value(item_texts.pop(0), values)
                     Converter.get_choka_table_value(item_texts.pop(0), values)
                     self.choka = self.choka.append(values, ignore_index=True)
+
             else:
-                values = dict(Date=choka_date, Point=self.point, Comment=comment_text)
+                """各時間の釣果ニュースラインを抽出"""
+                values = dict(Date=choka_date, Point=self.point)
+                if content_weather:
+                    Converter.get_header(content_weather.text, values)
+                Converter.get_comment(content_foot.text, values)
                 self.newsline = self.newsline.append(values, ignore_index=True)
         return self
+
+    def get_timestamps(self):
+        timestamps = dict(choka=None, newsline=None)
+        if len(self.comment.index) > 0:
+            comment_date = self.comment["Date"]
+            timestamps['choka'] = comment_date.max()
+        if len(self.newsline.index) > 0:
+            newsline_date = self.newsline["Time"]
+            timestamps['newsline'] = newsline_date.max()
+        return timestamps
+
+    def export_data(self, df, filename, format='csv'):
+        export_path = pkg_resources.resource_filename("data", filename)
+        df.to_csv(export_path)
+
+    def export(self, format='csv'):
+        self.export_data(self.choka, "choka.csv")
+        self.export_data(self.comment, "comment.csv")
+        self.export_data(self.newsline, "newsline.csv")
+
+    def append(self, parser):
+        self.choka = self.choka.append(parser.choka)
+        self.comment = self.comment.append(parser.comment)
+        self.newsline = self.newsline.append(parser.newsline)
 
     def run(self):
         """
@@ -104,7 +137,7 @@ class Parser():
         parseCount = 0
         for root, dirs, files in os.walk(template_dir):
             for file in files:
-                m = re.match('choka_(.+)_(\d+)\.html$', file)
+                m = re.match(r'choka_(.+)_(\d+)\.html$', file)
                 if m:
                     chokaInfo = m.groups()
                     html = os.path.join(root, file)

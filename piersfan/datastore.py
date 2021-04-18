@@ -1,37 +1,99 @@
-"""統計処理管理
-
-SQLite3 を用いて処理統計を管理します。
-指定したメトリック名に対して SQLite3 に値を登録します。
-Stat().show() メソッドで、登録したメトリックをレポートします。
-"""
-
+import os
 import logging
+import pkg_resources
 import pandas as pd
 import dataset as ds
+from sqlalchemy import inspect
+
+Description = '''
+SQLite3を用いて釣果情報を管理します。
+釣りビジョン釣果情報ホームページから釣果を取得した、csv データをインポートします。
+'''
+
+class Table():
+    def __init__(self, table_name, index_columns, csv):
+        self.table_name = table_name
+        self.index_columns = index_columns
+        self.csv = csv
 
 class Datastore():
-    def __init__(self):
-        db = ds.connect('sqlite:///fishing_result.db')
+    def __init__(self, db_name = 'fishing_result.db'):
+        db = ds.connect('sqlite:///data/{}'.format(db_name))
         self.db = db
+        self.db_path = pkg_resources.resource_filename("data", db_name)
+        self.tables = [
+            Table('fishing_results', ['Date', 'Point', 'Species'], 'choka.csv'),
+            Table('fishing_comments', ['Date', 'Point'], 'comment.csv'),
+            Table('fishing_newslines', ['Date', 'Time', 'Point'], 'newsline.csv'),
+        ]
+        self.load_counts = dict()
         logging.getLogger(__name__).info("database created")
 
+    def export_path(self, filename):
+        return pkg_resources.resource_filename("data", filename)
+
+    def reset_loadfile(self, filename):
+        load_path = self.export_path(filename)
+        if os.path.exists(load_path):
+            os.remove(load_path)
+        self.load_counts[filename] = 0
+
+    def reset_loadfiles(self):
+        for table in self.tables:
+            self.reset_loadfile(table.csv)
+        return self
+
+    def reset_database(self):
+        if os.path.exists(self.db_path):
+            os.remove(self.db_path)
+        return self
+
+    def create_index(self, table_name, index_columns):
+        self.db.create_table(table_name).create_index(index_columns)
+
     def create_indexes(self):
-        results = self.db.create_table('fishing_results')
-        results.create_index(['Date', 'Point', 'Species'])
-        comments = self.db.create_table('fishing_comments')
-        comments.create_index(['Date', 'Point'])
+        for table in self.tables:
+            self.create_index(table.table_name, table.index_columns)
 
-    def run(self):
-        results = pd.read_csv('chokaData.csv', index_col = 0)
-        results.to_sql("fishing_results", self.db.engine, if_exists="replace")
+    def initial_load(self, csv, table_name):
+        results = pd.read_csv(self.export_path(csv), index_col = 0)
+        print(results.columns)
+        results.to_sql(table_name, self.db.engine, if_exists="replace")
+        self.load_counts[csv] = len(results.index)
 
-        comments = pd.read_csv('chokaComment.csv', index_col = 0)
-        comments.to_sql("fishing_comments", self.db.engine, if_exists="replace")
-
-        dates = pd.DataFrame({"Date": pd.date_range("2018-04-09", "2021-04-03")})
-        dates['Date'] = dates.Date.dt.strftime('%Y-%m-%d')
-        dates.to_sql("dates", self.db.engine, if_exists="replace")
+    def initial_loads(self):
+        self.reset_database()
+        for table in self.tables:
+            self.initial_load(table.csv, table.table_name)
 
         logging.getLogger(__name__).info("loaded")
         self.create_indexes()
 
+    def regist_row(self, table_name, index_columns, values):
+        table = self.db[table_name]
+        keys = dict()
+        for index_column in index_columns:
+            keys[index_column] = values[index_column]
+        if table.find_one(**keys):
+            table.update(values, index_columns)
+        else:
+            table.insert(values)
+
+    def append_load(self, csv, table_name, index_columns):
+        results = pd.read_csv(self.export_path(csv), index_col = 0)
+        for result in results.to_dict(orient='records'):
+            self.regist_row(table_name, index_columns, result)
+        self.load_counts[csv] = len(results.index)
+        return self
+
+    def append_loads(self):
+        for table in self.tables:
+            self.append_load(table.csv, table.table_name, table.index_columns)
+        return self
+
+    def csv_import(self):
+        if os.path.exists(self.db_path):
+            self.append_loads()
+        else:
+            self.initial_loads()
+        return self

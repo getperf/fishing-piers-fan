@@ -20,4 +20,4 @@ header_comment = ['Date', 'Point', 'Weather', 'WaterTemp', 'Quantity', 'Comment'
 
 # ニュースラインカラム
 
-header_newsline = ['Date', 'Point', 'Comment']
+header_newsline = ['Date', 'Time', 'Point', 'Comment']

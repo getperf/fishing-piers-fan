@@ -3,7 +3,7 @@ import time
 import logging
 import unicodedata
 import piersfan.constants as constants
-import datetime
+from datetime import datetime
 import locale
 from dateutil import parser
 
@@ -13,51 +13,6 @@ HTML 要素を解析して変換する。
 '''
 
 class Converter():
-
-    @staticmethod
-    def getWaterTemp(str):
-        # 【水温】13.5℃
-        waterTemp = str.replace('\n', '').replace(' ', '')
-        m = re.search(r'([0-9]+\.[0-9]+)', waterTemp)
-        if m:
-            return float(m.groups()[0])
-        m = re.search('([0-9]+)', waterTemp)
-        if m:
-            return float(m.groups()[0])
-        return None
-
-    @staticmethod
-    def getChokaDate(str):
-        chokaDate = str.replace('\n', '').replace(' ', '')
-        m = re.search('([0-9]+)年([0-9]+)月([0-9]+)日', chokaDate)
-        if m:
-            return parser.parse('/'.join(m.groups()))
-        return None
-
-    @staticmethod
-    def getRangeValues(str):
-        # 25～30 cm
-        m = re.search(r'([0-9\.]+)～([0-9\.]+)\s*(cm|kg)', str)
-        if m:
-            vals = m.groups()
-            return [float(vals[0]), float(vals[1])]
-
-        # 39  cm
-        m = re.search(r'([0-9\.]+)\s*(cm|kg)', str)
-        if m:
-            vals = m.groups()
-            return [float(vals[0]), float(vals[0])]
-        return None
-
-    @staticmethod
-    def getValues(str):
-        m = re.search('([0-9]+)匹', str)
-        if m:
-            return float(m.groups()[0])
-        if str:
-            return str
-        else:
-            return None
 
     @staticmethod
     def get_header(comment, headers):
@@ -123,17 +78,18 @@ class Converter():
         return None
 
     @staticmethod
-    def makeCommentDict(comment):
-        print("TEST")
-        # commentDict = {'Comment': comment}
-        commentDict = {'Comment': ''}
-        # 入場者数:45人
-        # 今日は強い風雨で釣りにくい中、コノシロ・イワシが一
-        comment = comment.replace('\n', '').replace(' ', '')
-        # m = re.search('入場者数:([0-9]+)人(.*)', comment)
-        m = re.search('入場者数:([0-9]+?)人(.*)', comment)
-        print(m.groups())
+    def get_comment(text, comments):
+        """空白を整形し、削除する"""
+        text = unicodedata.normalize("NFKD", text)
+        text = text.replace('\n', '').replace(' ', '')
+        comments['Comment'] = text
+        m = re.search(r'\(.+?([0-9]+):([0-9]+)\)', text)
         if m:
-            commentDict['Quantity'] = m.groups()[0]
-            commentDict['Comment'] = m.groups()[1]
-        return commentDict
+            # comments['Time'] = m.groups()[0]
+            # comments['Time'] = parser.parse(':'.join(m.groups()))
+            time = datetime.strptime(':'.join(m.groups()),"%H:%M")
+            date = comments['Date']
+            comments['Time'] = datetime.combine(date.date(),time.time())
+
+            # print(comments['Date'] + datetime.strptime(':'.join(m.groups()),"%H:%M"))
+            # comments['Time'] = datetime.strptime(':'.join(m.groups()),"%H:%M")
