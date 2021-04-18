@@ -19,6 +19,9 @@ _logger = logging.getLogger(__name__)
 
 class Download:
     def __init__(self):
+        """
+        ホームページダウンロードパラメータを初期化します
+        """
         self.areas = dict()
         self.now = datetime.date.today()
         self.crawl_interval = config.CrawlInterval
@@ -26,6 +29,9 @@ class Download:
         self.page_found = True
 
     def load_config(self, config_path='config.toml'):
+        """
+        設定ファイルを読み、ホームページダウンロードパラメータを登録します
+        """
         config_toml = toml.load(config_path)
         if 'area' in config_toml:
             self.areas = config_toml['area']
@@ -38,16 +44,26 @@ class Download:
         return self
 
     def get_query_times(self, delta_month):
+        """
+        現在時刻から指定カ月の過去の年、月を返します。値はホームページ検索
+        条件に使用します
+        """
         date = self.now - relativedelta(months=delta_month)
         return [date.year, date.month]
 
     @staticmethod
     def get_form_data(year, month, page=1):
+        """
+        検索フォームデータを作成します
+        """
         values = dict(page=page, choko_ys=year, choko_ms='{:0=2}'.format(month))
         data = urllib.parse.urlencode(values)
         return data.encode('ascii')  # data should be bytes
 
     def check_html_no_data(self, html_data):
+        """
+        取得した HTML に釣果ページがあるか判定します
+        """
         self.page_found = True
         soup = BeautifulSoup(html_data, 'html.parser')
         contents = soup.find_all('div', class_="choka")
@@ -56,6 +72,9 @@ class Download:
         return self
 
     def download(self, area_name, year, month, page=1):
+        """
+        指定した検索条件でホームページをダウンロードして、CSV に保存します
+        """
         download_url = Config.get_url(area_name)
         download_file = Config.get_download_file(area_name, year, month, page)
         save_path = Config.get_download_path(download_file)
@@ -70,6 +89,9 @@ class Download:
             _logger.info("download: {}".format(download_file))
 
     def run(self, last_month=0):
+        """
+        各施設のホープページを巡回して、ダウンロードした結果を CSV に保存します
+        """
         for area in self.areas:
             area_name = area['name']
             delta_month = last_month
