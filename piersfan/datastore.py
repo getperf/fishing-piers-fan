@@ -20,9 +20,9 @@ class Table:
 
 class Datastore:
     def __init__(self, db_name=config.ChokaDB):
-        db = ds.connect('sqlite:///{}/{}'.format(config.DataDir, db_name))
+        self.db_path = Config.get_db_path(db_name)
+        db = ds.connect('sqlite:///{}'.format(self.db_path))
         self.db = db
-        self.db_path = Config.get_data_path(db_name)
         self.tables = [
             Table('fishing_results', ['Date', 'Point', 'Species'], 'choka.csv'),
             Table('fishing_comments', ['Date', 'Point'], 'comment.csv'),
@@ -32,7 +32,7 @@ class Datastore:
         logging.getLogger(__name__).info("database created")
 
     def reset_load_file(self, filename):
-        load_path = Config.get_data_path(filename)
+        load_path = Config.get_datastore_path(filename)
         if os.path.exists(load_path):
             os.remove(load_path)
         self.load_counts[filename] = 0
@@ -55,7 +55,7 @@ class Datastore:
             self.create_index(table.table_name, table.index_columns)
 
     def initial_load(self, csv, table_name):
-        results = pd.read_csv(Config.get_data_path(csv), index_col=0)
+        results = pd.read_csv(Config.get_datastore_path(csv), index_col=0)
         print(results.columns)
         results.to_sql(table_name, self.db.engine, if_exists="replace")
         self.load_counts[csv] = len(results.index)
@@ -79,7 +79,7 @@ class Datastore:
             table.insert(values)
 
     def append_load(self, csv, table_name, index_columns):
-        results = pd.read_csv(Config.get_data_path(csv), index_col=0)
+        results = pd.read_csv(Config.get_datastore_path(csv), index_col=0)
         for result in results.to_dict(orient='records'):
             self.upsert_row(table_name, index_columns, result)
         self.load_counts[csv] = len(results.index)

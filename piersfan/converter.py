@@ -1,3 +1,4 @@
+import logging
 import re
 import unicodedata
 from datetime import datetime
@@ -8,6 +9,7 @@ Description = '''
 HTML 要素を解析して変換する。
 '''
 
+_logger = logging.getLogger(__name__)
 
 class Converter:
 
@@ -76,10 +78,14 @@ class Converter:
     def get_comment(text, comments):
         """空白を整形し、削除する"""
         text = unicodedata.normalize("NFKD", text)
-        text = text.replace('\n', '').replace(' ', '')
+        text = text.replace('\n', '')
         comments['Comment'] = text
         m = re.search(r'\(.+?([0-9]+):([0-9]+)\)', text)
         if m:
-            time = datetime.strptime(':'.join(m.groups()), "%H:%M")
-            date = comments['Date']
-            comments['Time'] = datetime.combine(date.date(), time.time())
+            time_label = ':'.join(m.groups())
+            try:
+                time = datetime.strptime(time_label, "%H:%M")
+                date = comments['Date']
+                comments['Time'] = datetime.combine(date.date(), time.time())
+            except ValueError:
+                _logger.warn("failed to parse time : {}".format(time_label))

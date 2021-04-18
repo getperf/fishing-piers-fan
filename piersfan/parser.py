@@ -23,14 +23,15 @@ class Parser():
     comment: DataFrame
     newsline: DataFrame
 
-    def __init__(self, point, year, month, page=1):
+    # def __init__(self, point, year, month, page=1):
+    def __init__(self, point=None):
         """
         魚種別釣果、コメントのデータフレームを初期化
         """
         self.point = point
-        self.year = year
-        self.month = month
-        self.page = page
+        # self.year = year
+        # self.month = month
+        # self.page = page
         self.choka = pd.DataFrame(columns=config.header_choka)
         self.comment = pd.DataFrame(columns=config.header_comment)
         self.newsline = pd.DataFrame(columns=config.header_newsline)
@@ -78,7 +79,6 @@ class Parser():
                     Converter.get_header(content_weather.text, headers)
                 for content_other in content_others:
                     Converter.get_header(content_other.text, headers)
-                _logger.info("魚種別釣果コメント読込み", headers)
                 self.comment = self.comment.append(headers, ignore_index=True)
 
                 rows = content.find_all('tr')
@@ -113,7 +113,7 @@ class Parser():
         return timestamps
 
     def export_data(self, df, filename, format='csv'):
-        export_path = Config.get_data_path(filename)
+        export_path = Config.get_datastore_path(filename)
         df.to_csv(export_path)
 
     def export(self, format='csv'):
@@ -125,6 +125,7 @@ class Parser():
         self.choka = self.choka.append(parser.choka)
         self.comment = self.comment.append(parser.comment)
         self.newsline = self.newsline.append(parser.newsline)
+        return self
 
     def run(self):
         """
@@ -132,22 +133,13 @@ class Parser():
         釣果情報を抽出して、CSV 形式にして保存する
 
         """
-        template_dir = os.path.join(config.DownloadDir)
-        parseCount = 0
-        for root, dirs, files in os.walk(template_dir):
-            for file in files:
-                m = re.match(r'choka_(.+)_(\d+)\.html$', file)
-                if m:
-                    chokaInfo = m.groups()
-                    html = os.path.join(root, file)
-                    self.parseHtml(html, chokaInfo[0], chokaInfo[1])
-                    parseCount += 1
-                    print("parse:{},{}".format(file, parseCount))
-                # if parseCount > 2:
-                #     break
-        self.chokaData.reset_index(drop=True, inplace=True)
-
-        path = 'chokaData.csv'
-        self.chokaData.to_csv(path)
-        path = 'chokaComment.csv'
-        self.chokaComments.to_csv(path)
+        html_files = Config.list_download_dirs()
+        for html_file in html_files:
+            point = Config.get_point_from_html_filename(html_file)
+            if not point:
+                continue
+            _logger.info("parse: {}".format(html_file))
+            html_path = Config.get_download_path(html_file)
+            parser = Parser(point).parse_html(html_path)
+            self = self.append(parser)
+        self.export()

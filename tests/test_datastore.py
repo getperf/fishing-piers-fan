@@ -12,11 +12,11 @@ TEST_DB = 'test_fishing_result.db'
 
 def test_init():
     Datastore(TEST_DB).reset_database()
-    db_path = Config.get_data_path(TEST_DB)
+    db_path = Config.get_db_path(TEST_DB)
     assert not os.path.exists(db_path)
 
 def test_get_choka_db():
-    print( Config.get_choka_db())
+    print( Config.get_db_path())
 
 def test_reset_loadfile():
     datastore = Datastore(TEST_DB).reset_load_files()

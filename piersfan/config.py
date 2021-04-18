@@ -1,3 +1,4 @@
+import re
 import pkg_resources
 
 # フィッシングTV釣果情報ホームページURL
@@ -18,7 +19,7 @@ ChokaDB = 'fishing_result.sqlite3'
 
 # ダウンロード巡回のインターバル(秒)
 
-CrawlInterval = 5
+CrawlInterval = 3
 
 # 釣果サイトページネーションの最大ページ数
 
@@ -44,12 +45,12 @@ class Config:
         return pkg_resources.resource_filename(package, filename)
 
     @staticmethod
-    def get_data_path(filename):
-        return Config._get_path("data", filename)
+    def get_datastore_path(filename):
+        return Config._get_path("data.datastore", filename)
 
     @staticmethod
     def get_download_path(filename):
-        return Config._get_path("download", filename)
+        return Config._get_path("data.download", filename)
 
     @staticmethod
     def test_resource(filename):
@@ -64,5 +65,17 @@ class Config:
         return 'choka_{}_{}_{:0=2}_{:0=3}.html'.format(area_name, year, month, page)
 
     @staticmethod
-    def get_choka_db():
-        return Config._get_path("data", ChokaDB)
+    def get_db_path(db_file=ChokaDB):
+        return Config._get_path("data", db_file)
+
+    @staticmethod
+    def list_download_dirs():
+        return pkg_resources.resource_listdir('data', 'download')
+
+    @staticmethod
+    def get_point_from_html_filename(html_file):
+        m = re.match(r'choka_(.+)_(\d+)_(\d+)_(\d+)\.html$', html_file)
+        if  m:
+            [point, year, month, page] = m.groups()
+            return point
+        return None
