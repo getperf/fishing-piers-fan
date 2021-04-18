@@ -7,12 +7,16 @@ from piersfan.config import Config
 
 Description = '''
 SQLite3を用いて釣果情報を管理します。
-釣りビジョン釣果情報ホームページから釣果を取得した、csv データをインポートします。
+フィッシングピアーズ釣果情報ホームページから釣果を取得した、
+csv データをインポートします。
 '''
 
 
 class Table:
     def __init__(self, table_name, index_columns, csv):
+        """
+        データベースに登録するモデルの属性を定義します
+        """
         self.table_name = table_name
         self.index_columns = index_columns
         self.csv = csv
@@ -20,6 +24,9 @@ class Table:
 
 class Datastore:
     def __init__(self, db_name=config.ChokaDB):
+        """
+        SQLite3 データベースへの接続と、各モデル定義を初期化します
+        """
         self.db_path = Config.get_db_path(db_name)
         db = ds.connect('sqlite:///{}'.format(self.db_path))
         self.db = db
@@ -32,35 +39,56 @@ class Datastore:
         logging.getLogger(__name__).info("database created")
 
     def reset_load_file(self, filename):
+        """
+        CSV ロードファイルを削除します
+        """
         load_path = Config.get_datastore_path(filename)
         if os.path.exists(load_path):
             os.remove(load_path)
         self.load_counts[filename] = 0
 
     def reset_load_files(self):
+        """
+        各 CSV ロードファイルを削除します
+        """
         for table in self.tables:
             self.reset_load_file(table.csv)
         return self
 
     def reset_database(self):
+        """
+        SQLite3 データベースファイルを削除します
+        """
         if os.path.exists(self.db_path):
             os.remove(self.db_path)
         return self
 
     def create_index(self, table_name, index_columns):
+        """
+        テーブルに索引を追加します
+        """
         self.db.create_table(table_name).create_index(index_columns)
 
     def create_indexes(self):
+        """
+        各テーブルに索引を追加します
+        """
         for table in self.tables:
             self.create_index(table.table_name, table.index_columns)
 
     def initial_load(self, csv, table_name):
+        """
+        テーブルを作成して、CSV データを初期ロードをします
+        """
         results = pd.read_csv(Config.get_datastore_path(csv), index_col=0)
         print(results.columns)
         results.to_sql(table_name, self.db.engine, if_exists="replace")
         self.load_counts[csv] = len(results.index)
 
     def initial_loads(self):
+        """
+        各テーブルを作成して、CSV データを初期ロードをします
+        """
         self.reset_database()
         for table in self.tables:
             self.initial_load(table.csv, table.table_name)
@@ -69,6 +97,9 @@ class Datastore:
         self.create_indexes()
 
     def upsert_row(self, table_name, index_columns, values):
+        """
+        テーブルにレコードを追加します、既設のレコードは更新します
+        """
         table = self.db[table_name]
         keys = dict()
         for index_column in index_columns:
@@ -79,6 +110,9 @@ class Datastore:
             table.insert(values)
 
     def append_load(self, csv, table_name, index_columns):
+        """
+        テーブルに全 CSV レコードを登録します、既設のレコードは更新します
+        """
         results = pd.read_csv(Config.get_datastore_path(csv), index_col=0)
         for result in results.to_dict(orient='records'):
             self.upsert_row(table_name, index_columns, result)
@@ -86,11 +120,18 @@ class Datastore:
         return self
 
     def append_loads(self):
+        """
+        各テーブルに全 CSV レコードを登録します、既設のレコードは更新します
+        """
         for table in self.tables:
             self.append_load(table.csv, table.table_name, table.index_columns)
         return self
 
     def csv_import(self):
+        """
+        データベースに各 CSV ファイルをインポートします。既設のデータベース
+        がある場合は追加登録します
+        """
         if os.path.exists(self.db_path):
             self.append_loads()
         else:

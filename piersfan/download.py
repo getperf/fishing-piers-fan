@@ -10,14 +10,12 @@ from piersfan import config
 from piersfan.config import Config
 
 Description = '''
-横浜フィッシングピアースの釣果情報ホームページをダウンロードする
+フィッシングピアースの釣果情報ホームページをダウンロードする
 '''
 
-# UrlFishingPiers = "http://{}.yokohama-fishingpiers.jp/choka.php"
-# CrawlInterval = 5
-# DownloadDir = 'download'
 
 _logger = logging.getLogger(__name__)
+
 
 class Download:
     def __init__(self):
@@ -43,7 +41,8 @@ class Download:
         date = self.now - relativedelta(months=delta_month)
         return [date.year, date.month]
 
-    def get_form_data(self, year, month, page=1):
+    @staticmethod
+    def get_form_data(year, month, page=1):
         values = dict(page=page, choko_ys=year, choko_ms='{:0=2}'.format(month))
         data = urllib.parse.urlencode(values)
         return data.encode('ascii')  # data should be bytes

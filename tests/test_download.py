@@ -1,11 +1,6 @@
-import re
-import sys
-import os
-import pytest
-import datetime
-import pandas as pd
 from piersfan.download import Download
 from piersfan.config import Config
+
 
 # py.test tests/test_download.py -v --capture=no -k test_run
 
@@ -20,8 +15,10 @@ from piersfan.config import Config
 def test_get_url():
     assert Config.get_url("daikoku") == 'http://daikoku.yokohama-fishingpiers.jp/choka.php'
 
+
 def test_get_download_file():
     assert Config.get_download_file("daikoku", 2021, 4) == "choka_daikoku_2021_04_001.html"
+
 
 def test_html_no_data():
     html_path = Config.test_resource("not_found1.html")
@@ -30,6 +27,7 @@ def test_html_no_data():
     f.close()
     download = Download().load_config().check_html_no_data(html)
     assert not download.page_found
+
 
 def test_run():
     download = Download().load_config()
@@ -46,5 +44,3 @@ def test_run():
 # def test_download():
 #     download = Download()
 #     assert download.download('daikoku', 2021, 3, 1) == None
-
-

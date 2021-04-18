@@ -1,5 +1,3 @@
-import pkg_resources
-
 from piersfan.parser import Parser
 from piersfan.config import Config
 
@@ -65,13 +63,3 @@ def test_append():
     assert timestamps['choka']
     assert timestamps['newsline']
 
-def test_parse_all():
-    html_files = Config.list_download_dirs()
-    for html_file in html_files:
-        point = Config.get_point_from_html_filename(html_file)
-        if not point:
-            continue
-        html_path = Config.get_download_path(html_file)
-        f = open(html_path, encoding='euc_jp', errors='ignore')
-        html = f.read()
-        f.close()

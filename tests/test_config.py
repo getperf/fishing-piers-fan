@@ -1,5 +1,3 @@
-import datetime
-
 from piersfan.config import Config
 
 

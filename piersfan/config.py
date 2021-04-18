@@ -1,6 +1,13 @@
 import re
 import pkg_resources
 
+Description = '''
+フィッシングピアーズ釣果情報抽出パラメータ
+データ保存ディレクトリパスは Python パッケージディレクトリ構成に
+して管理します
+'''
+
+
 # フィッシングTV釣果情報ホームページURL
 
 UrlFishingPiers = "http://{}.yokohama-fishingpiers.jp/choka.php"
@@ -75,7 +82,7 @@ class Config:
     @staticmethod
     def get_point_from_html_filename(html_file):
         m = re.match(r'choka_(.+)_(\d+)_(\d+)_(\d+)\.html$', html_file)
-        if  m:
+        if m:
             [point, year, month, page] = m.groups()
             return point
         return None

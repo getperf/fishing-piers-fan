@@ -31,3 +31,8 @@ def test_get_comment():
 現在南風が少し強くなって来ています。
 (磯子12:04)""", comments)
     assert comments['Time'] == datetime.datetime(2021, 4, 12, 12, 4)
+
+def test_get_comment_time_error():
+    comments = dict(Date=datetime.datetime(2021, 4, 12, 0, 0))
+    Converter.get_comment("""(磯子4/1912:04)""", comments)
+    assert comments['Time'] == datetime.datetime(2021, 4, 12, 0, 0)

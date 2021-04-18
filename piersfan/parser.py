@@ -1,7 +1,4 @@
 import logging
-import os
-import os.path
-import re
 import pandas as pd
 from bs4 import BeautifulSoup
 from pandas import DataFrame
@@ -11,8 +8,8 @@ from piersfan.config import Config
 from piersfan.converter import Converter
 
 Description = '''
-釣りビジョン釣果情報ホームページから釣果を取得する。取得情報は、
-水温、コメント、魚種別釣果の3種
+フィッシングピアーズホームページ HTML から釣果情報を取得し、
+CSV ファイルに帆zンします。
 '''
 
 _logger = logging.getLogger(__name__)
@@ -103,6 +100,9 @@ class Parser():
         return self
 
     def get_timestamps(self):
+        """
+        取得した釣果コメントとニュースラインの最終更新日時を取得します
+        """
         timestamps = dict(choka=None, newsline=None)
         if len(self.comment.index) > 0:
             comment_date = self.comment["Date"]
@@ -113,15 +113,24 @@ class Parser():
         return timestamps
 
     def export_data(self, df, filename, format='csv'):
+        """
+        取得した釣果情報データフレームを CSV に保存します
+        """
         export_path = Config.get_datastore_path(filename)
         df.to_csv(export_path)
 
     def export(self, format='csv'):
+        """
+        取得した各釣果情報データフレームを CSV に保存します
+        """
         self.export_data(self.choka, "choka.csv")
         self.export_data(self.comment, "comment.csv")
         self.export_data(self.newsline, "newsline.csv")
 
     def append(self, parser):
+        """
+        引数に指定した他の HTML 解析結果を追加します
+        """
         self.choka = self.choka.append(parser.choka)
         self.comment = self.comment.append(parser.comment)
         self.newsline = self.newsline.append(parser.newsline)
@@ -129,9 +138,8 @@ class Parser():
 
     def run(self):
         """
-        data ディレクトリ下の ダウンロード済みの釣果情報 html ファイルを順に読む。
-        釣果情報を抽出して、CSV 形式にして保存する
-
+        data ディレクトリ下の ダウンロード済みの釣果情報 HTML ファイルを
+        順に読み込み、釣果情報を抽出して、CSV 形式にして保存します
         """
         html_files = Config.list_download_dirs()
         for html_file in html_files:
@@ -141,5 +149,5 @@ class Parser():
             _logger.info("parse: {}".format(html_file))
             html_path = Config.get_download_path(html_file)
             parser = Parser(point).parse_html(html_path)
-            self = self.append(parser)
+            self.append(parser)
         self.export()
