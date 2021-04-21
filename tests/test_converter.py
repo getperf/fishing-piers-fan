@@ -3,7 +3,7 @@ import datetime
 from piersfan.converter import Converter
 
 
-# py.test tests/test_converter.py -v --capture=no -k test_get_header
+# py.test tests/test_converter.py -v --capture=no -k test_get_cell_value
 
 def test_get_header():
     headers = dict()
@@ -16,6 +16,20 @@ def test_get_header():
     Converter.get_header("入場者数：104名", headers)
     assert headers['Quantity'] == 104
     print(headers)
+
+def test_get_cell_value():
+    values = dict()
+    Converter.get_choka_table_value("25 - 28 cm", values)
+    assert values == {'SizeMin': 25, 'SizeMax': 28}
+
+    values2 = dict()
+    Converter.get_choka_table_value("合計24匹", values2)
+    assert values2 == {'Count': 24}
+
+    values3 = dict()
+    Converter.get_choka_table_value("1.90-2.50kg", values3)
+    assert values3 == {'WeightMin': 1.9, 'WeightMax': 2.5}
+
 
 
 def test_get_date():

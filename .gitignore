@@ -2,6 +2,9 @@ venv/
 Scripts/
 .idea/
 pyenv.cfg
+*.zip
+*.tar.gz
+data/*.sqlite3*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

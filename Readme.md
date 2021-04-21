@@ -12,7 +12,7 @@ C:\home\hugo\choka
 要件検討
 -------
 
-釣りビジョン釣果情報サイトにアクセスし、
+横浜フィッシングピアースの釣果情報ホームページにアクセスし、
 指定した釣り場の釣果情報を取得する
 
 * URLで釣り場を指定
@@ -111,4 +111,13 @@ download ディレクトリ下の HTML ファイルをスキャン
 jupyter report 連携
 sqlalchemy db 接続
 
+piersfan save
 
+sqlite3 data/fishing_result.sqlite3
+
+select count(*) from fishing_newslines;
+75338
+select count(*) from fishing_results;
+81804
+select count(*) from fishing_comments;
+4879

@@ -3,7 +3,6 @@ import logging
 from piersfan.download import Download
 from piersfan.parser import Parser
 from piersfan.datastore import Datastore
-from piersfan.report import Report
 
 
 class Cli(object):
@@ -12,7 +11,7 @@ class Cli(object):
     """
 
     def download(self, config="config.toml", month=0):
-        """釣りビジョンホームページから釣果ページHTMLをダウンロードする"""
+        """横浜フィッシングピアースホームページから釣果ページHTMLをダウンロードする"""
         return Download().load_config(config).run(month)
 
     def parse(self):
@@ -21,12 +20,7 @@ class Cli(object):
 
     def save(self):
         """抽出した釣果情報CSVファイルを、SQLite3データベースに保存する"""
-        return Datastore().run()
-
-    def report(self, type="json"):
-        """抽出ファイルを解析してレポートを生成する"""
-        return Report().run()
-
+        return Datastore().csv_import()
 
 def main():
     # ログの初期化

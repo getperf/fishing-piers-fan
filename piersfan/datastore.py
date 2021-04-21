@@ -11,6 +11,8 @@ SQLite3を用いて釣果情報を管理します。
 csv データをインポートします。
 '''
 
+_logger = logging.getLogger(__name__)
+
 
 class Table:
     def __init__(self, table_name, index_columns, csv):
@@ -36,7 +38,6 @@ class Datastore:
             Table('fishing_newslines', ['Date', 'Time', 'Point'], 'newsline.csv'),
         ]
         self.load_counts = dict()
-        logging.getLogger(__name__).info("database created")
 
     def reset_load_file(self, filename):
         """
@@ -81,7 +82,6 @@ class Datastore:
         テーブルを作成して、CSV データを初期ロードをします
         """
         results = pd.read_csv(Config.get_datastore_path(csv), index_col=0)
-        print(results.columns)
         results.to_sql(table_name, self.db.engine, if_exists="replace")
         self.load_counts[csv] = len(results.index)
 
@@ -93,7 +93,7 @@ class Datastore:
         for table in self.tables:
             self.initial_load(table.csv, table.table_name)
 
-        logging.getLogger(__name__).info("loaded")
+        _logger.info("initial load : {}".format(self.load_counts))
         self.create_indexes()
 
     def upsert_row(self, table_name, index_columns, values):
@@ -125,6 +125,7 @@ class Datastore:
         """
         for table in self.tables:
             self.append_load(table.csv, table.table_name, table.index_columns)
+        _logger.info("upsert load : {}".format(self.load_counts))
         return self
 
     def csv_import(self):
@@ -133,7 +134,8 @@ class Datastore:
         がある場合は追加登録します
         """
         if os.path.exists(self.db_path):
+            _logger.info("update db : {}".format(self.db_path))
             self.append_loads()
         else:
+            _logger.info("create db : {}".format(self.db_path))
             self.initial_loads()
-        return self

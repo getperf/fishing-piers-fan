@@ -42,21 +42,21 @@ class Converter:
         HTML 釣果テーブルから各セル値を抽出し、辞書に登録します
         """
         comment = unicodedata.normalize("NFKD", comment)
-        m = re.search(r'合計 (\d+) 匹', comment)
+        m = re.search(r'合計\s*(\d+)\s*匹', comment)
         if m:
             values['Count'] = int(m.groups()[0])
             return
 
         # 最大、最小魚種サイズの抽出。25～30 cm
-        m = re.search(r'([0-9.]+)～([0-9.]+)\s*(cm|kg)', comment)
+        m = re.search(r'([0-9.]+)\s*-\s*([0-9.]+)\s*(cm|kg)', comment)
         if m:
             [min_val, max_val, unit] = m.groups()
             if unit == 'cm':
-                values['SizeMin'] = min_val
-                values['SizeMax'] = max_val
+                values['SizeMin'] = float(min_val)
+                values['SizeMax'] = float(max_val)
             elif unit == 'kg':
-                values['WeightMin'] = min_val
-                values['WeightMax'] = max_val
+                values['WeightMin'] = float(min_val)
+                values['WeightMax'] = float(max_val)
             return
 
         # 単一の魚種サイズの抽出。39  cm
@@ -64,11 +64,11 @@ class Converter:
         if m:
             [val, unit] = m.groups()
             if unit == 'cm':
-                values['SizeMin'] = val
-                values['SizeMax'] = val
+                values['SizeMin'] = float(val)
+                values['SizeMax'] = float(val)
             elif unit == 'kg':
-                values['WeightMin'] = val
-                values['WeightMax'] = val
+                values['WeightMin'] = float(val)
+                values['WeightMax'] = float(val)
             return
         return None
 
