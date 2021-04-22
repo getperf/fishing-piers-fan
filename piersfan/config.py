@@ -76,6 +76,10 @@ class Config:
         return Config._get_path("data", db_file)
 
     @staticmethod
+    def get_config_path(config_file='config.toml'):
+        return Config._get_path("data", config_file)
+
+    @staticmethod
     def list_download_dirs():
         return pkg_resources.resource_listdir('data', 'download')
 

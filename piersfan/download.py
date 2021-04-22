@@ -22,19 +22,20 @@ class Download:
         """
         ホームページダウンロードパラメータを初期化します
         """
-        self.areas = dict()
+        # self.areas = []
         self.now = datetime.date.today()
         self.crawl_interval = config.CrawlInterval
         self.max_page = config.MaxPage
         self.page_found = True
 
-    def load_config(self, config_path='config.toml'):
+    def load_config(self, config_path=Config.get_config_path()):
         """
         設定ファイルを読み、ホームページダウンロードパラメータを登録します
         """
-        config_toml = toml.load(config_path)
+        config_toml = toml.load(open(config_path))
+        print(config_toml.get('area'))
         if 'area' in config_toml:
-            self.areas = config_toml['area']
+            self.areas = config_toml.get('area')
         if 'interval' in config_toml:
             self.crawl_interval = config_toml['interval']
         if 'max_page' in config_toml:

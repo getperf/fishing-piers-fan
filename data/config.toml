@@ -1,0 +1,20 @@
+# Sleep time (seconds) when scraping the Yokohama fishing piers homepage
+# interval = 3
+
+# Maximum number of pages for fishing home page
+# max_page = 1000
+
+# List of scraping the Yokohama fishing piers homepage points
+# URL : http://{area}.yokohama-fishingpiers.jp/choka.php 
+[[area]]
+
+name = 'daikoku'
+
+[[area]]
+
+name = 'isogo'
+
+[[area]]
+
+name = 'honmoku'
+

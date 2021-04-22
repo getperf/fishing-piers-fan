@@ -1,7 +1,6 @@
 fire~=0.4.0
 numpy
 pandas~=1.2.4
-scipy
 requests~=2.25.1
 toml~=0.10.2
 beautifulsoup4==4.9.3
