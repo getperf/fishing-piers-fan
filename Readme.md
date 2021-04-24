@@ -1,7 +1,7 @@
 # Yokohama Fishing Piers Fan
 
-横浜フィッシングピアースのホームページから釣果情報を取得して
-SQLite3 データベースに登録します。
+横浜フィッシングピアースのホームページから釣果情報を抽出して
+データベースにロードします。
 定期的に実行することで、データベースに釣果情報を蓄積し、
 蓄積したデータベースを分析することで釣行計画に利用します。
 
@@ -111,7 +111,7 @@ jupyter notebook で本レポートを開いて実際に利用方法を確認
 
 * SQL を用いてデータベースを検索します。
 
-  SQLite3 データベースのテーブルモデルは以下の通りです。
+  データベースのテーブルモデルは以下の通りです。
 
     ![ER図](docs/erd.drawio.png)
 
@@ -151,7 +151,7 @@ Refference
 -----------
 
 1. [横浜フィッシングピアーズ](http://daikoku.yokohama-fishingpiers.jp/index.php)
-2. [自転車散歩の釣り記録](http://daikoku.yokohama-fishingpiers.jp/index.php)
+2. [自転車散歩、釣り記録](http://daikoku.yokohama-fishingpiers.jp/index.php)
 
 COPYRIGHT
 -----------
