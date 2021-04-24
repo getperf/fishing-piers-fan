@@ -115,7 +115,7 @@ jupyter notebook で本レポートを開いて実際に利用方法を確認
 
     ![ER図](docs/erd.drawio.png)
 
-  各テーブル定義は以下の通りです。
+* 各テーブル定義は以下の通りです。
 
   * fishing_results (魚種別釣果)
     * キー : Date(日付), Point(施設名), Species(魚種)
