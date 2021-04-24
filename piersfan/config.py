@@ -24,7 +24,7 @@ ChokaDB = 'fishing_result.db'
 
 # ダウンロード巡回のインターバル(秒)
 
-CrawlInterval = 1
+CrawlInterval = 3
 
 # 釣果サイトページネーションの最大ページ数
 
