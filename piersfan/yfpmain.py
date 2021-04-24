@@ -37,6 +37,7 @@ class YFPFan():
         self.month = args.month
         self.page = args.page
         self.init = args.init
+        self.keep = args.keep
         self.show = args.show
 
     def parser(self):
@@ -53,6 +54,8 @@ class YFPFan():
                             help = "max number of pages to visit the homepage")
         parser.add_argument("-i", "--init", action="store_true", 
                             help = "initialize database")
+        parser.add_argument("-k", "--keep", action="store_true", 
+                            help = "keep old download files")
         parser.add_argument("-s", "--show", action="store_true", 
                             help = "show config parameter")
         return parser.parse_args()
@@ -80,7 +83,7 @@ class YFPFan():
         else:
             downloader = Download(self.page).load_config(self.config_path).check_config()
             if downloader:
-                downloader.run(self.month)
+                downloader.run(self.month, self.keep)
                 Parser().run()
                 Datastore().csv_import()
             return

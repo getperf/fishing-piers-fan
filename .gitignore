@@ -4,7 +4,7 @@ Scripts/
 pyenv.cfg
 *.zip
 *.tar.gz
-data/*.sqlite3*
+data/*.db
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

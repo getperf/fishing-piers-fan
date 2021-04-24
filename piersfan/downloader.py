@@ -5,6 +5,7 @@ import datetime
 import urllib
 import urllib.request
 import toml
+from http.client import IncompleteRead
 from dateutil.relativedelta import relativedelta
 from bs4 import BeautifulSoup
 from piersfan import config
@@ -101,21 +102,30 @@ class Download:
         download_url = Config.get_url(area_name)
         download_file = Config.get_download_file(area_name, year, month, page)
         save_path = Config.get_download_path(download_file)
+        if os.path.exists(save_path):
+            _logger.info("skip download for file exist {}".format(download_file))
+            return
 
         form_data = self.get_form_data(year, month, page)
         req = urllib.request.Request(download_url, form_data)
-        html_data = urllib.request.urlopen(req).read()
+        try:
+            html_data = urllib.request.urlopen(req).read()
+        except IncompleteRead as e:
+            html_data = e.partial
+        time.sleep(self.crawl_interval)
+
         self.check_html_no_data(html_data)
         if self.page_found:
             with open(save_path, mode="wb") as f:
                 f.write(html_data)
             _logger.info("save {}".format(download_file))
 
-    def run(self, last_month=0):
+    def run(self, last_month=0, keep=False):
         """
         各施設のホープページを巡回して、ダウンロードした結果を CSV に保存します
         """
-        self.reset_download()
+        if not keep:
+            self.reset_download()
         for area in self.areas:
             area_name = area['name']
             delta_month = last_month
@@ -126,7 +136,6 @@ class Download:
                 page = 1
                 while page <= self.max_page:
                     self.download(area_name, year, month, page)
-                    time.sleep(self.crawl_interval)
                     page = page + 1
                     if not self.page_found:
                         break
