@@ -1,11 +1,15 @@
-# Sleep time (seconds) when scraping the Yokohama fishing piers homepage
+# Sleep interval when scraping the fishing piers homepage
+# interval must be greater than 3
 # interval = 3
+interval = 1
 
-# Maximum number of pages for fishing home page
+# Maximum number of pages to visit the homepage
+
 # max_page = 1000
 
-# List of scraping the Yokohama fishing piers homepage points
-# URL : http://{area}.yokohama-fishingpiers.jp/choka.php 
+# Area list of Yokohama Fishing Piers homepage
+# Replace area with url http://{area}.yokohama-fishingpiers.jp/choka.php
+
 [[area]]
 
 name = 'daikoku'

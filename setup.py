@@ -10,7 +10,7 @@ setup(
     install_requires=install_requirements,
     entry_points={
         "console_scripts": [
-            "yfpfan=piersfan.cli.yfpfan:main",
+            "yfp=piersfan.cli.yfp:main",
         ]
     },
     classifiers=[

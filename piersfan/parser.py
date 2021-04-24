@@ -26,9 +26,6 @@ class Parser():
         魚種別釣果、コメントのデータフレームを初期化
         """
         self.point = point
-        # self.year = year
-        # self.month = month
-        # self.page = page
         self.choka = pd.DataFrame(columns=config.header_choka)
         self.comment = pd.DataFrame(columns=config.header_comment)
         self.newsline = pd.DataFrame(columns=config.header_newsline)
@@ -146,7 +143,7 @@ class Parser():
             point = Config.get_point_from_html_filename(html_file)
             if not point:
                 continue
-            _logger.info("parse: {}".format(html_file))
+            _logger.info("read {}".format(html_file))
             html_path = Config.get_download_path(html_file)
             parser = Parser(point).parse_html(html_path)
             self.append(parser)

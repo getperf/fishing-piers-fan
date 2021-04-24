@@ -60,6 +60,7 @@ class Datastore:
         """
         SQLite3 データベースファイルを削除します
         """
+        _logger.info("initialize {}".format(self.db_path))
         if os.path.exists(self.db_path):
             os.remove(self.db_path)
         return self
@@ -134,8 +135,6 @@ class Datastore:
         がある場合は追加登録します
         """
         if os.path.exists(self.db_path):
-            _logger.info("update db : {}".format(self.db_path))
             self.append_loads()
         else:
-            _logger.info("create db : {}".format(self.db_path))
             self.initial_loads()

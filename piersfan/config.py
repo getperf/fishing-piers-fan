@@ -3,8 +3,7 @@ import pkg_resources
 
 Description = '''
 フィッシングピアーズ釣果情報抽出パラメータ
-データ保存ディレクトリパスは Python パッケージディレクトリ構成に
-して管理します
+データ保存ディレクトリパスは Python パッケージディレクトリで管理します
 '''
 
 
@@ -15,18 +14,17 @@ UrlFishingPiers = "http://{}.yokohama-fishingpiers.jp/choka.php"
 # HTMLダウンロードファイル保存場所
 
 DownloadDir = 'download'
-
 # CSV, SQLite3 データファイル保存場所
 
 DataDir = 'data'
 
 # 釣果情報を保存するデータベースファイル名
 
-ChokaDB = 'fishing_result.sqlite3'
+ChokaDB = 'fishing_result.db'
 
 # ダウンロード巡回のインターバル(秒)
 
-CrawlInterval = 3
+CrawlInterval = 1
 
 # 釣果サイトページネーションの最大ページ数
 
@@ -90,3 +88,9 @@ class Config:
             [point, year, month, page] = m.groups()
             return point
         return None
+
+    @staticmethod
+    def show_config():
+        print("DATABASE_PATH={}".format(Config.get_db_path()))
+        print("DEFAULT_CONFIG={}".format(Config.get_config_path()))
+        print("DOWNLOAD_DIR={}".format(Config.get_download_path("")))

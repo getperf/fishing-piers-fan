@@ -13,8 +13,9 @@ Parametrs
 
 import logging
 import argparse
+from piersfan import config
 from piersfan.config import Config
-from piersfan.download import Download
+from piersfan.downloader import Download
 from piersfan.parser import Parser
 from piersfan.datastore import Datastore
 
@@ -34,7 +35,9 @@ class YFPFan():
         """
         self.config_path = args.config
         self.month = args.month
+        self.page = args.page
         self.init = args.init
+        self.show = args.show
 
     def parser(self):
         """
@@ -46,16 +49,18 @@ class YFPFan():
                             help = "<path>\\config.toml")
         parser.add_argument("-m", "--month", type = int, default = 0, 
                             help = "last n month before downloading")
+        parser.add_argument("-p", "--page", type = int, default = config.MaxPage, 
+                            help = "max number of pages to visit the homepage")
         parser.add_argument("-i", "--init", action="store_true", 
                             help = "initialize database")
+        parser.add_argument("-s", "--show", action="store_true", 
+                            help = "show config parameter")
         return parser.parse_args()
 
-    def run(self, args):
-        Download.load_config(self.config_path).run(self.month)
-        Parser().run()
-        Datastore().csv_import(self.init)
-
     def main(self):
+        """
+        メイン処理。コマンド引数別に処理する
+        """
         logging.basicConfig(
             level=getattr(logging, 'INFO'),
             format='%(asctime)s [%(levelname)s] %(module)s %(message)s',
@@ -63,7 +68,22 @@ class YFPFan():
         )
         args = self.parser()
         self.set_envoronment(args)
-        self.run(args)
+        if self.show:
+            Config.show_config()
+            return
+
+        elif self.init:
+            Datastore().reset_database()
+            Download().reset_download()
+            return
+
+        else:
+            downloader = Download(self.page).load_config(self.config_path).check_config()
+            if downloader:
+                downloader.run(self.month)
+                Parser().run()
+                Datastore().csv_import()
+            return
 
 if __name__ == '__main__':
     YFPFan().main()

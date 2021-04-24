@@ -1,11 +1,7 @@
-fire~=0.4.0
-numpy
 pandas~=1.2.4
 requests~=2.25.1
 toml~=0.10.2
 beautifulsoup4==4.9.3
-openpyxl
-xlrd
 dataset~=1.4.5
 matplotlib
 japanize_matplotlib
@@ -13,6 +9,7 @@ datetime~=4.3
 jpholiday
 seaborn
 pytest~=6.2.3
+jupyter
 
 python-dateutil~=2.8.1
 SQLAlchemy~=1.4.9
