@@ -1,10 +1,15 @@
-# 横浜フィッシングピアース釣果情報リサーチ
+# Yokohama Fishing Piers Fan
 
 横浜フィッシングピアースのホームページから釣果情報を取得して
 SQLite3 データベースに登録します。
-定期的に実行することで、データベースに釣果情報を蓄積します。
-Jupyter notebook を用いて蓄積したデータベースを分析をし、
-釣行計画に利用ます。
+定期的に実行することで、データベースに釣果情報を蓄積し、
+蓄積したデータベースを分析することで釣行計画に利用します。
+
+![アジ分析例](docs/sample_report1.png)
+
+以下により詳しい釣果リサーチのブログがあります。
+
+https://mon3nr.github.io/blog1/
 
 ## インストール
 
@@ -52,9 +57,9 @@ Python 3.9 の環境が必要です。
 
   **注意事項**
 
-  1年分のダウンロードページ数は数千ページになります。長い期間を指定して実行する場合は、
-  夜間に実行する、巡回インターバルを長くするなど、サイトへの負荷影響を意識して
-  実行してください。
+  横浜フィッシングピアーズの1年分の釣果ページ数は数千ページになります。長い期間を指定してダウンロードを実行する場合は、
+  夜間に実行する、巡回インターバルを長くするなど、サイトへの負
+  荷が掛からない様に意識して実行してください。
 
 * --show オプションでデータベースのパスなどの構成情報を出力します。
 
@@ -65,11 +70,15 @@ Python 3.9 の環境が必要です。
   後述の jupyter notebook でのデータ分析では、本コマンドで表示された 
   fishing_result.db データベースパスを指定します。
 
-* 詳細の設定は、 **{project_dir}/data/config.toml** に記述します。
+  詳細の設定は、 **{project_dir}/data/config.toml** に記述します。
 
-## 釣果情報の分析
+## 分析チュートリアル
 
-* jupyter notebook で起動します。
+**notebook** ディレクトリにサンプルのレポートがあるので、
+jupyter notebook で本レポートを開いて実際に利用方法を確認
+してください。
+
+* jupyter notebook を起動します。
 
   ```
   cd {インストール先}/fishing-piers-fan
@@ -80,158 +89,77 @@ Python 3.9 の環境が必要です。
 
   **注意事項**
 
-  Linux 環境の場合は、実行ログメッセージに出力された URL にアクセスしてホームページ
-  を開いてください。
+  Linux 環境の場合は、実行ログメッセージに出力された URL を Web ブラウザに入力してアクセスしてください。
 
-* notebook ディレクトリを選択し、サンプルレポート **sample1.ipynb** を選択します。
+* ディレクトリ **notebook** を選択し、サンプルレポート **sample1.ipynb** を選択し、レポートを実行してください。
 
-* pandas などデータ分析用パッケージをインポートします
+* Juptyer notebook とのデータ連携は、蓄積した SQLite3 
+  データベースのみになります。SQLite3 データベースのパス
+  を確認する場合は以下を実行してください。
 
-* データベースを検索します。
+  ```
+  from piersfan.config import Config
+  print(Config.get_db_path())
+  ```
 
-  SQL を用いてaaaa
+  表示されたパスを指定して、データベースに接続します
+
+  ```
+  conn = sqlite3.connect("{SQLite3データベースパス}")
+  ```
+
+
+* SQL を用いてデータベースを検索します。
+
+  SQLite3 データベースのテーブルモデルは以下の通りです。
 
     ![ER図](docs/erd.drawio.png)
 
-モジュール構成
---------------
+  各テーブル定義は以下の通りです。
 
-* html ダウンロード、施設ディレクトリ、ページ舞ファイル
-* テキストパース
-* SQLite3 保存
-
-インストール
-------------
-
-
-使用方法
---------
-
-
-
-
-
-
-横浜釣果情報検索
-================
-
-cd /c/home/hugo/choka
-
-python -m venv .
-
-pip install beautifulsoup4
-
-C:\home\hugo\choka
-
-要件検討
+  * fishing_results (魚種別釣果)
+    * キー : Date(日付), Point(施設名), Species(魚種)
+    * カラム : Count(釣果数), SizeMin(最小cm), SizeMax
+      (最大cm), WeightMin(最小kg), WieghtMax(最大kg), 
+      Comment(コメント), Place(場所)
+  * fishing_comments (釣果サマリ)
+    * キー : Date(日付), Point(施設名)
+    * カラム : Weather(天気), WaterTemp(水温℃), 
+      Quantity(入場者数), Comment(コメント), Tide(潮), 
+      Time(時刻)
+  * fishing_newslines (釣果速報)
+    * キー : Date(日付), Time(時刻), Point(施設名)
+    * カラム : Comment(コメント), Weather(天気)
+      
+注意事項
 -------
 
-横浜フィッシングピアースの釣果情報ホームページにアクセスし、
-指定した釣り場の釣果情報を取得する
+横浜フィッシングピアーズホームページの二次利用について、
+管理事務局より動画、画像を除くテキスト情報の利用は特に
+規定はなく、一般的な常識の範囲内での利用は問題ないとの回答
+がありました。
+ただし、動画、画像に関しては事前の申請が必要になります。
+詳細は以下URLを参照してください。
 
-* URLで釣り場を指定
-* 気温、当日の状況コメント、魚種別釣果の3種類を保存する
-* 日付をキーにする
-* 結果は CSV に保存
+http://daikoku.yokohama-fishingpiers.jp/use.php
 
-モジュール構成
---------------
+> 施設内で撮影（写真・動画）を行なう際には、事前に施設に許可申請が必要です。
+SNSへ動画や記事を掲載する場合も、同様に事前のお申込みをお願い致します。
+また、撮影内容につきましては、当施設のルールとマナーをお守りください。
 
-* html ダウンロード、施設ディレクトリ、ページ舞ファイル
-* テキストパース
-* SQLite3 保存
+Refference
+-----------
 
-使用方法
--------
+1. [横浜フィッシングピアーズ](http://daikoku.yokohama-fishingpiers.jp/index.php)
+2. [自転車散歩の釣り記録](http://daikoku.yokohama-fishingpiers.jp/index.php)
 
-from choka.util import scraper
+COPYRIGHT
+-----------
 
-choka = scraper.get("https://www.fishing-v.jp/choka/choka_detail.php?s=11285")
-print(choka.temp)
-print(choka.comment)
-print(choka.results)
+Copyright 2021, Minoru Furusawa <frsw3nr@gmail.com>
 
-setup.py 準備
---------------
+LICENSE
+-----------
 
-https://qiita.com/Tadahiro_Yamamura/items/2cbcd272a96bb3761cc8
+This program is released under [GNU General Public License, version 2](http://www.gnu.org/licenses/gpl-2.0.html).
 
-
-# Installation
-
-Simply run:
-
-    python -m pip install -e .
-
-# 開発環境のインストール
-
-    python -m pip install --force-reinstall --editable .
-
-# Usage
-
-To use it:
-
-    gcbat --help
-
-HTMLダウンロード
------------------
-
-大黒
-
-全880件 2018/4/12 ～ 2021/3/30
-
-https://www.fishing-v.jp/choka/choka_detail.php?s=11285&pageID=1
-https://www.fishing-v.jp/choka/choka_detail.php?s=11285&pageID=88
-
-磯子
-
-全963件 2018/3/31 ～ 2021/3/30
-
-https://www.fishing-v.jp/choka/choka_detail.php?s=11286&pageID=1
-https://www.fishing-v.jp/choka/choka_detail.php?s=11286&pageID=97
-
-本牧
-
-全587件
-
-https://www.fishing-v.jp/choka/choka_detail.php?s=11284&pageID=1
-https://www.fishing-v.jp/choka/choka_detail.php?s=11284&pageID=58
-
-dataframe から、json に変換
-
-mkdir data
-cd data
-wget https://www.fishing-v.jp/choka/choka_detail.php?s=11285&pageID=1
-
-施設ごとに順に巡回する
-何カ月前からダウンロードするかを指定
-URL フォームデータに年、月を指定し、開始月から順にアクセス
-各ページをダウンロード
-    ページの解析結果で 「データがありません」がでたら、翌月にカウントアップ
-    最終更新日付を記録する
-    巡回して取得したページの日付が前回の最終更新日付よりも古ければ終了する
-
-残件整理
-
-ダウンロード
-    釣果ページの日付のチェック、取得日付が前回実行日付よりも古い場合は何もしない ⇒保留
-解析
-    download ディレクトリ下の HTML ファイルをスキャンして解析、csv 保存
-
-download ディレクトリ下の HTML ファイルをスキャン
-
-ファイル整形、コメント追加、Readme 作成
-
-jupyter report 連携
-sqlalchemy db 接続
-
-piersfan save
-
-sqlite3 data/fishing_result.sqlite3
-
-select count(*) from fishing_newslines;
-75338
-select count(*) from fishing_results;
-81804
-select count(*) from fishing_comments;
-4879
