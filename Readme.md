@@ -131,8 +131,7 @@ jupyter notebook で本レポートを開いて実際に利用方法を確認
     * キー : Date(日付), Time(時刻), Point(施設名)
     * カラム : Comment(コメント), Weather(天気)
       
-注意事項
--------
+## 注意事項
 
 横浜フィッシングピアーズホームページの二次利用について、
 管理事務局より動画、画像を除くテキスト情報の利用は特に
@@ -147,19 +146,16 @@ http://daikoku.yokohama-fishingpiers.jp/use.php
 SNSへ動画や記事を掲載する場合も、同様に事前のお申込みをお願い致します。
 また、撮影内容につきましては、当施設のルールとマナーをお守りください。
 
-Refference
------------
+## Refference
 
 1. [横浜フィッシングピアーズ](http://daikoku.yokohama-fishingpiers.jp/index.php)
 2. [自転車散歩、釣り記録](http://daikoku.yokohama-fishingpiers.jp/index.php)
 
-COPYRIGHT
------------
+## COPYRIGHT
 
 Copyright 2021, Minoru Furusawa <frsw3nr@gmail.com>
 
-LICENSE
------------
+## LICENSE
 
 This program is released under [GNU General Public License, version 2](http://www.gnu.org/licenses/gpl-2.0.html).
 
