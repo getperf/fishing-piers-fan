@@ -108,29 +108,35 @@ jupyter notebook で本レポートを開いて実際に利用方法を確認
   conn = sqlite3.connect("{SQLite3データベースパス}")
   ```
 
+## データベースモデル
 
-* SQL を用いてデータベースを検索します。
+SQL を用いてデータベースを検索します。
 
-  データベースのテーブルモデルは以下の通りです。
+データベースのテーブルモデルは以下の通りです。
 
-    ![ER図](docs/erd.drawio.png)
+  ![ER図](docs/erd.drawio.png)
 
-* 各テーブル定義は以下の通りです。
+各テーブル定義は以下の通りです。
 
-  * fishing_results (魚種別釣果)
-    * キー : Date(日付), Point(施設名), Species(魚種)
-    * カラム : Count(釣果数), SizeMin(最小cm), SizeMax
-      (最大cm), WeightMin(最小kg), WieghtMax(最大kg), 
-      Comment(コメント), Place(場所)
-  * fishing_comments (釣果サマリ)
-    * キー : Date(日付), Point(施設名)
-    * カラム : Weather(天気), WaterTemp(水温℃), 
-      Quantity(入場者数), Comment(コメント), Tide(潮), 
-      Time(時刻)
-  * fishing_newslines (釣果速報)
-    * キー : Date(日付), Time(時刻), Point(施設名)
-    * カラム : Comment(コメント), Weather(天気)
-      
+### fishing_results (魚種別釣果)
+
+* キー : Date(日付), Point(施設名), Species(魚種)
+* カラム : Count(釣果数), SizeMin(最小cm), SizeMax
+  (最大cm), WeightMin(最小kg), WieghtMax(最大kg), 
+  Comment(コメント), Place(場所)
+
+### fishing_comments (釣果サマリ)
+
+* キー : Date(日付), Point(施設名)
+* カラム : Weather(天気), WaterTemp(水温℃), 
+  Quantity(入場者数), Comment(コメント), Tide(潮), 
+  Time(時刻)
+
+### fishing_newslines (釣果速報)
+
+* キー : Date(日付), Time(時刻), Point(施設名)
+* カラム : Comment(コメント), Weather(天気)
+
 ## 注意事項
 
 横浜フィッシングピアーズホームページの二次利用について、
