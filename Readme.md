@@ -2,12 +2,11 @@
 
 横浜フィッシングピアースのホームページから釣果情報を抽出して
 データベースにロードします。
-定期的に実行することで、データベースに釣果情報を蓄積し、
-蓄積したデータベースを分析することで釣行計画に利用します。
+釣果情報をデータベースに蓄積し、分析することで釣行計画に利用します。
 
 ![アジ分析例](docs/sample_report1.png)
 
-以下により詳しい釣果リサーチのブログがあります。
+以下により詳しい釣果分析のブログがあります。
 
 https://mon3nr.github.io/blog1/
 
@@ -139,11 +138,11 @@ SQL を用いてデータベースを検索します。
 
 ## 注意事項
 
-横浜フィッシングピアーズホームページの二次利用について、
-管理事務局より動画、画像を除くテキスト情報の利用は特に
-規定はなく、一般的な常識の範囲内での利用は問題ないとの回答
-がありました。
-ただし、動画、画像に関しては事前の申請が必要になります。
+横浜フィッシングピアーズホームページデータの二次利用について、
+管理事務局より画像を除くテキスト情報の利用は特に規定はなく、
+一般的な常識の範囲内での利用は問題ないとの回答がありました。
+ただし、動画、画像に関しては事前の申請、料金の発生が必要になります。
+また、ブログなどに掲載する場合も事前の確認、申請が必要になります。
 詳細は以下URLを参照してください。
 
 http://daikoku.yokohama-fishingpiers.jp/use.php
@@ -163,5 +162,5 @@ Copyright 2021, Minoru Furusawa <frsw3nr@gmail.com>
 
 ## LICENSE
 
-This program is released under [GNU General Public License, version 2](http://www.gnu.org/licenses/gpl-2.0.html).
+This program is released under [GNU General Public License, version 2](http://www.gnu.org/licenses/gpl-2.0.html) or later.
 
