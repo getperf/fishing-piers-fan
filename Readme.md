@@ -165,7 +165,7 @@ SNSへ動画や記事を掲載する場合も、同様に事前のお申込み�
 
 ## COPYRIGHT
 
-Copyright 2021, Minoru Furusawa <frsw3nr@gmail.com>
+Copyright 2021, Minoru Furusawa <mon3nr@gmail.com>
 
 ## LICENSE
 
