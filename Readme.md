@@ -9,7 +9,7 @@
 
 釣果分析のブログ記事があります。
 
-https://mon3nr.github.io/blog1/
+https://mon3nr.github.io/blog1/blog/yfpreserch01/
 
 ## インストール
 
@@ -161,7 +161,7 @@ SNSへ動画や記事を掲載する場合も、同様に事前のお申込み�
 ## Refference
 
 1. [横浜フィッシングピアーズ](http://daikoku.yokohama-fishingpiers.jp/index.php)
-2. [自転車散歩、釣り記録](http://daikoku.yokohama-fishingpiers.jp/index.php)
+2. [自転車散歩、釣り記録](https://mon3nr.github.io/blog1/)
 
 ## COPYRIGHT
 
