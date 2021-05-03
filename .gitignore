@@ -1,6 +1,7 @@
 venv/
 Scripts/
 .idea/
+.vscode/
 pyenv.cfg
 *.zip
 *.tar.gz

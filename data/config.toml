@@ -1,7 +1,7 @@
 # Sleep interval when scraping the fishing piers homepage
 # interval must be greater than 3
+
 # interval = 3
-interval = 3
 
 # Maximum number of pages to visit the homepage
 

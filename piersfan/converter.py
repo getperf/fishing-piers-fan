@@ -41,7 +41,7 @@ class Converter:
         """
         HTML 釣果テーブルから各セル値を抽出し、辞書に登録します
         """
-        comment = unicodedata.normalize("NFKD", comment)
+        comment = unicodedata.normalize("NFC", comment)
         m = re.search(r'合計\s*(\d+)\s*匹', comment)
         if m:
             values['Count'] = int(m.groups()[0])
@@ -89,7 +89,7 @@ class Converter:
         HTML コメントから、コメントと時刻を抽出し、辞書に登録します
         """
         """空白を整形し、削除する"""
-        text = unicodedata.normalize("NFKD", text)
+        text = unicodedata.normalize("NFC", text)
         text = text.replace('\n', '')
         comments['Comment'] = text
         m = re.search(r'\(.+?([0-9]+):([0-9]+)\)', text)
