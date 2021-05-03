@@ -3,7 +3,7 @@ import datetime
 from piersfan.converter import Converter
 
 
-# py.test tests/test_converter.py -v --capture=no -k test_get_cell_value
+# py.test tests/test_converter.py -v --capture=no -k test_get_comment_nfd
 
 def test_get_header():
     headers = dict()
@@ -50,3 +50,9 @@ def test_get_comment_time_error():
     comments = dict(Date=datetime.datetime(2021, 4, 12, 0, 0))
     Converter.get_comment("""(磯子4/1912:04)""", comments)
     assert comments['Time'] == datetime.datetime(2021, 4, 12, 0, 0)
+
+def test_get_comment_nfd():
+    comments = dict()
+    str = "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"
+    Converter.get_comment(str, comments)
+    assert comments['Comment'] == "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"
