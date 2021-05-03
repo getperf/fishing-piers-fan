@@ -78,6 +78,10 @@ class Config:
         return Config._get_path("data", config_file)
 
     @staticmethod
+    def get_ap_log_path(log_file='yfp.log'):
+        return Config._get_path("data", log_file)
+
+    @staticmethod
     def list_download_dirs():
         return pkg_resources.resource_listdir('data', 'download')
 

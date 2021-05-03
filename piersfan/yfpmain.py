@@ -38,6 +38,7 @@ class YFPFan():
         self.page = args.page
         self.init = args.init
         self.keep = args.keep
+        self.log_enable = args.log
         self.show = args.show
 
     def parser(self):
@@ -56,6 +57,8 @@ class YFPFan():
                             help = "initialize database")
         parser.add_argument("-k", "--keep", action="store_true", 
                             help = "keep old download files")
+        parser.add_argument("-l", "--log", action="store_true", 
+                            help = "write log to file")
         parser.add_argument("-s", "--show", action="store_true", 
                             help = "show config parameter")
         return parser.parse_args()
@@ -64,13 +67,17 @@ class YFPFan():
         """
         メイン処理。コマンド引数別に処理する
         """
+        args = self.parser()
+        self.set_envoronment(args)
+        log_path = None
+        if self.log_enable:
+            log_path = Config.get_ap_log_path()
         logging.basicConfig(
+            filename=log_path,
             level=getattr(logging, 'INFO'),
             format='%(asctime)s [%(levelname)s] %(module)s %(message)s',
             datefmt='%Y/%m/%d %H:%M:%S',
         )
-        args = self.parser()
-        self.set_envoronment(args)
         if self.show:
             Config.show_config()
             return
