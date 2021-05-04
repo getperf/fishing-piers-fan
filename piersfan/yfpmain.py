@@ -18,6 +18,7 @@ from piersfan.config import Config
 from piersfan.downloader import Download
 from piersfan.parser import Parser
 from piersfan.datastore import Datastore
+from piersfan.exporter import Exporter
 
 
 Description='''
@@ -40,6 +41,8 @@ class YFPFan():
         self.keep = args.keep
         self.log_enable = args.log
         self.show = args.show
+        self.export = args.export
+        self.time = args.time
 
     def parser(self):
         """
@@ -61,6 +64,11 @@ class YFPFan():
                             help = "write log to file")
         parser.add_argument("-s", "--show", action="store_true", 
                             help = "show config parameter")
+        parser.add_argument("-e", "--export", action="store_true",
+                            help = "export csv data")
+        parser.add_argument("-t", "--time", type = str,
+                            default="1day",
+                            help = "time period to export")
         return parser.parse_args()
 
     def main(self):
@@ -81,6 +89,9 @@ class YFPFan():
         if self.show:
             Config.show_config()
             return
+
+        elif self.export:
+            Exporter().run(self.time)
 
         elif self.init:
             Datastore().reset_database()

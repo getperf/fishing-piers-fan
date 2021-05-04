@@ -54,6 +54,11 @@ class Config:
         return Config._get_path("data.datastore", filename)
 
     @staticmethod
+    def get_export_path(tablename):
+        filename = "{}.csv".format(tablename)
+        return Config._get_path("data.export", filename)
+
+    @staticmethod
     def get_download_path(filename):
         return Config._get_path("data.download", filename)
 

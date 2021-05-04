@@ -1,5 +1,7 @@
+import re
 import datetime
 
+from piersfan.config import Config
 from piersfan.converter import Converter
 
 
@@ -56,3 +58,20 @@ def test_get_comment_nfd():
     str = "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"
     Converter.get_comment(str, comments)
     assert comments['Comment'] == "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"
+
+def test_cleansing_comment():
+    comment_path = Config.test_resource("comment1.txt")
+    f = open(comment_path)
+    comment = f.read()
+    f.close()
+    comment = Converter.clensing_summary_comment(comment)
+    assert comment
+    print(comment)
+
+    comment_path = Config.test_resource("comment2.txt")
+    f = open(comment_path)
+    comment = f.read()
+    f.close()
+    comment2 = Converter.clensing_summary_comment(comment)
+    assert comment2
+    print(comment2)

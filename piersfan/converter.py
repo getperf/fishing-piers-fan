@@ -105,3 +105,60 @@ class Converter:
             except ValueError:
                 comments['Time'] = date
                 _logger.warning("parse time failed : {}".format(time_label))
+
+    @staticmethod
+    def clensing_summary_comment(comment):
+        """
+        釣果サマリコメントから不要な文を取り除く
+        """
+
+        """箇条書きで始まる箇所からそれ以降の文は除く"""
+        comment = unicodedata.normalize("NFC", comment)
+        lines = re.split(r'[【■★※＊]', comment)
+        if lines:
+            comment = lines[0]
+
+        """定型文は除く"""
+        lines = re.split(r'[。\n]', comment)
+        comment2 = ''
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if re.search(r'本日(.+)ご来場', line):
+                # print("HIT1")
+                continue
+            elif re.search(r'(お待ちして|What\'sNew|カード|提示|事前予約|急激に暗く|駐車)', line):
+                continue
+            else:
+                comment2 += line + "。"
+        if len(comment2) > 0:
+            comment = comment2
+        return comment
+
+    @staticmethod
+    def clensing_newsline_comment(comment):
+        """
+        釣果サマリコメントから不要な文を取り除く
+        """
+        comment = unicodedata.normalize("NFC", comment)
+        lines = re.split(r'[【■★※＊]', comment)
+        if lines:
+            comment = lines[0]
+
+        """定型文は除く"""
+        lines = re.split(r'[。\n]', comment)
+        comment2 = ''
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if re.search(r'本日(.+)ご来場', line):
+                # print("HIT1")
+                continue
+            elif re.search(r'(おはよう|交通|営業時間|ご来場|急激に暗く|カード|駐車|予約|受付|入場)', line):
+                continue
+            else:
+                comment2 += line + "。"
+        if len(comment2) > 0:
+            comment = comment2
+
+        return comment
