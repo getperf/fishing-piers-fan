@@ -105,6 +105,8 @@ class Converter:
             except ValueError:
                 comments['Time'] = date
                 _logger.warning("parse time failed : {}".format(time_label))
+        else:
+            comments['Time'] = comments['Date']
 
     @staticmethod
     def clensing_summary_comment(comment):
