@@ -5,7 +5,9 @@ Scripts/
 pyenv.cfg
 *.zip
 *.tar.gz
-data/*.db
+data/*.db*
+data/export/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

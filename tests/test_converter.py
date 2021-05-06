@@ -54,7 +54,7 @@ def test_get_comment_time_error():
     assert comments['Time'] == datetime.datetime(2021, 4, 12, 0, 0)
 
 def test_get_comment_nfd():
-    comments = dict()
+    comments = dict(Date=datetime.datetime(2021, 4, 12, 0, 0))
     str = "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"
     Converter.get_comment(str, comments)
     assert comments['Comment'] == "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"

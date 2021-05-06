@@ -2,14 +2,14 @@ from piersfan.parser import Parser
 from piersfan.config import Config
 
 
-# py.test tests/test_parser.py -v --capture=no -k test_parse_all
+# py.test tests/test_parser.py -v --capture=no -k test_daikoku_html_parser2
 
 def test_not_found():
     html_path = Config.test_resource("not_found1.html")
     assert not Parser("daikoku").parse_html(html_path)
 
 
-def test_daikoku_html_parseer():
+def test_daikoku_html_parser():
     html_path = Config.test_resource("daikoku1.html")
     parser = Parser("daikoku").parse_html(html_path)
     timestamps = parser.get_timestamps()
@@ -19,6 +19,17 @@ def test_daikoku_html_parseer():
     assert timestamps['choka']
     assert timestamps['newsline']
 
+def test_daikoku_html_parser2():
+    print("TEST")
+    html_path = Config.test_resource("daikoku2.html")
+    parser = Parser("daikoku").parse_html(html_path)
+    timestamps = parser.get_timestamps()
+    print(parser.choka.columns)
+    print(parser.comment.columns)
+    print(parser.newsline.columns)
+    print(timestamps)
+    assert timestamps['choka']
+    assert timestamps['newsline']
 
 def test_daikoku_only_newsline_parser():
     html_path = Config.test_resource("daikoku1_newsline.html")

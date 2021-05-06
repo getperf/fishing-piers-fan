@@ -92,7 +92,7 @@ class Converter:
         text = unicodedata.normalize("NFC", text)
         text = text.replace('\n', '')
         comments['Comment'] = text
-        m = re.search(r'\(.+?([0-9]+):([0-9]+)\)', text)
+        m = re.search(r'[\(（].+?([0-9]+):([0-9]+)[\)）]', text)
         if m:
             time_label = ':'.join(m.groups())
             date = comments['Date']

@@ -68,7 +68,7 @@ class Parser():
                 """終了記事を解析し、ヘッダと魚種別釣果を抽出"""
                 headers = dict(Date=choka_date, Point=self.point)
                 Converter.get_comment(content_foot.text, headers)
-                print(content_foot.text)
+                # print(content_foot.text)
                 if content_weather:
                     Converter.get_header(content_weather.text, headers)
                 for content_other in content_others:
