@@ -19,6 +19,7 @@ from piersfan.downloader import Download
 from piersfan.parser import Parser
 from piersfan.datastore import Datastore
 from piersfan.exporter import Exporter
+from piersfan.master_loader import MasterLoader
 
 
 Description='''
@@ -43,6 +44,7 @@ class YFPFan():
         self.show = args.show
         self.export = args.export
         self.time = args.time
+        self.loadmaster = args.loadmaster
 
     def parser(self):
         """
@@ -66,6 +68,8 @@ class YFPFan():
                             help = "show config parameter")
         parser.add_argument("-e", "--export", action="store_true",
                             help = "export csv data")
+        parser.add_argument("--loadmaster", action="store_true",
+                            help = "import master data")
         parser.add_argument("-t", "--time", type = str,
                             default="1day",
                             help = "time period to export")
@@ -92,6 +96,11 @@ class YFPFan():
 
         elif self.export:
             Exporter().run(self.time)
+
+        elif self.loadmaster:
+            loader = MasterLoader().load_config().check_config()
+            if loader:
+                loader.run()
 
         elif self.init:
             Datastore().reset_database()
