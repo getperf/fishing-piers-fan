@@ -5,7 +5,7 @@ from piersfan.config import Config
 from piersfan.converter import Converter
 
 
-# py.test tests/test_converter.py -v --capture=no -k test_get_comment_nfd
+# py.test tests/test_converter.py -v --capture=no -k test_get_biz_day
 
 def test_get_header():
     headers = dict()
@@ -75,3 +75,22 @@ def test_cleansing_comment():
     comment2 = Converter.clensing_summary_comment(comment)
     assert comment2
     print(comment2)
+
+def test_get_biz_day():
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 1, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 2, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 3, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 4, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 5, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 6, 0, 0)) == "WeekDay"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 7, 0, 0)) == "WeekDay"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 8, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 9, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 10, 0, 0)) == "WeekDay"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 11, 0, 0)) == "WeekDay"
+
+def test_cleansing_weather():
+    assert Converter.cleansing_weather('曇り') == "曇"
+    assert Converter.cleansing_weather('晴れ') == "晴"
+    assert Converter.cleansing_weather('晴れのち曇り') == "晴れのち曇り"
+

@@ -1,6 +1,7 @@
 import logging
 import re
 import unicodedata
+import jpholiday
 from datetime import datetime
 from dateutil import parser
 
@@ -44,7 +45,7 @@ class Converter:
         comment = unicodedata.normalize("NFC", comment)
         m = re.search(r'合計\s*(\d+)\s*匹', comment)
         if m:
-            values['Count'] = int(m.groups()[0])
+            values['Count'] = float(m.groups()[0])
             return
 
         # 最大、最小魚種サイズの抽出。25～30 cm
@@ -164,3 +165,21 @@ class Converter:
             comment = comment2
 
         return comment
+
+    @staticmethod
+    def get_biz_day(Date):
+        if Date.weekday() >= 5 or jpholiday.is_holiday(Date):
+            return 'Holiday'
+        else:
+            return 'WeekDay'
+
+    @staticmethod
+    def cleansing_weather(weather):
+        """
+        天気シノニムを整形する
+        """
+        if weather == '晴れ':
+            return '晴'
+        elif weather == '曇り':
+            return '曇'
+        return weather

@@ -74,8 +74,7 @@ class Exporter:
                                    params={"start":last_date})
             df = df.drop(columns=['index'])
             df = self.cleansing_data(table_name, df)
-            # print(df)
             export_path = Config.get_export_path(table_name)
-            df.to_csv(export_path, index=False)
+            df.to_csv(export_path)
             _logger.info("save {}".format(export_path))
 
