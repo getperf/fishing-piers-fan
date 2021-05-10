@@ -25,6 +25,7 @@ class MasterLoader:
         self.db_path = Config.get_db_path(db_name)
         self.db = ds.connect('sqlite:///{}'.format(self.db_path))
         self.target = pd.DataFrame(columns=['Target', 'Species'])
+        self.area = pd.DataFrame(columns=['Point', 'PointName'])
 
     def load_config(self, config_path=Config.get_config_path()):
         """
@@ -41,6 +42,13 @@ class MasterLoader:
                     values = {'Target': target_name, 'Species': species}
                     self.target = self.target.append(values, ignore_index=True)
 
+        """魚種ターゲットの読み込み"""
+        if 'area' in config_toml:
+            areas = config_toml['area']
+            for area in areas:
+                values = {'Point': area['name'], 'PointName': area['label']}
+                self.area = self.area.append(values, ignore_index=True)
+
         return self
 
     def check_config(self):
@@ -55,11 +63,13 @@ class MasterLoader:
         """
         if len(self.target) > 0:
             self.target.to_sql("fishing_target", self.db.engine, if_exists="replace")
+        if len(self.area) > 0:
+            self.area.to_sql("fishing_area", self.db.engine, if_exists="replace")
 
     def run(self):
         """
         SQLite3 から指定した期間の履歴データをCSVにエクスポートします
         """
-        _logger.info("master loader")
-        _logger.info(len(self.target))
+        _logger.info("load fishing_target {} row".format(len(self.target)))
+        _logger.info("load fishing_area {} row".format(len(self.area)))
         self.initial_load()
