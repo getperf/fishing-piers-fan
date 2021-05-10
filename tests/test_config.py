@@ -20,7 +20,7 @@ def test_get_point_from_html_filename():
 
 def test_toml_multibyte():
     config_path = Config.get_config_path("config.toml")
-    config_toml = toml.load(open(config_path))
+    config_toml = toml.load(open(config_path, encoding='utf-8'))
     df = pd.DataFrame(columns=['Target', 'Species'])
 
     if 'target' in config_toml:

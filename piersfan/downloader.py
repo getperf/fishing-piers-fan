@@ -34,7 +34,7 @@ class Download:
         """
         設定ファイルを読み、ホームページダウンロードパラメータを登録します
         """
-        config_toml = toml.load(open(config_path))
+        config_toml = toml.load(open(config_path, encoding='utf-8'))
         if 'area' in config_toml:
             self.areas = config_toml.get('area')
         if 'interval' in config_toml:

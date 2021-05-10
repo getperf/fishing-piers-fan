@@ -98,12 +98,13 @@ class YFPFan():
             Exporter().run(self.time)
 
         elif self.loadmaster:
-            loader = MasterLoader().load_config().check_config()
+            loader = MasterLoader().load_config()
             if loader:
                 loader.run()
 
         elif self.init:
             Datastore().reset_database()
+            MasterLoader().load_config().run()
             Download().reset_download()
             return
 

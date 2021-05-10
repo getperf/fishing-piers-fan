@@ -61,7 +61,7 @@ def test_get_comment_nfd():
 
 def test_cleansing_comment():
     comment_path = Config.test_resource("comment1.txt")
-    f = open(comment_path)
+    f = open(comment_path, encoding='utf-8')
     comment = f.read()
     f.close()
     comment = Converter.clensing_summary_comment(comment)
@@ -69,7 +69,7 @@ def test_cleansing_comment():
     print(comment)
 
     comment_path = Config.test_resource("comment2.txt")
-    f = open(comment_path)
+    f = open(comment_path, encoding='utf-8')
     comment = f.read()
     f.close()
     comment2 = Converter.clensing_summary_comment(comment)

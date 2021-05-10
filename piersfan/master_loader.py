@@ -31,7 +31,7 @@ class MasterLoader:
         """
         設定ファイルを読み、ホームページダウンロードパラメータを登録します
         """
-        config_toml = toml.load(open(config_path))
+        config_toml = toml.load(open(config_path, encoding='utf-8'))
 
         """魚種ターゲットの読み込み"""
         if 'target' in config_toml:
