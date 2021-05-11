@@ -68,7 +68,6 @@ class Parser():
                 """終了記事を解析し、ヘッダと魚種別釣果を抽出"""
                 headers = dict(Date=choka_date, Point=self.point)
                 Converter.get_comment(content_foot.text, headers)
-
                 if content_weather:
                     Converter.get_header(content_weather.text, headers)
                 for content_other in content_others:
@@ -113,6 +112,9 @@ class Parser():
         """
         取得した釣果情報データフレームを CSV に保存します
         """
+
+        """ 日付列のCSV変換で、フォーマットを固定して変換"""
+        df['Date'] = df['Date'].apply(lambda x: x.strftime('%Y-%m-%d'))
         export_path = Config.get_datastore_path(filename)
         df.to_csv(export_path)
 
@@ -123,6 +125,25 @@ class Parser():
         self.export_data(self.choka, "choka.csv")
         self.export_data(self.comment, "comment.csv")
         self.export_data(self.newsline, "newsline.csv")
+
+    def cleansing_fishing_summary(self):
+        """
+        釣果サマリに整形した変換データを登録します
+        """
+
+        """不要なコメントを抽出した釣果サマリ"""
+        self.comment['Summary'] = self.comment['Comment'].apply(
+            lambda x: Converter.clensing_newsline_comment(x))
+
+        """平日、休日の判定"""
+        self.comment['BizDay'] = self.comment['Date'].apply(
+            lambda x: Converter.get_biz_day(x))
+
+        """天気整形"""
+        self.comment['Weather'] = self.comment['Weather'].apply(
+            lambda x: Converter.cleansing_weather(x))
+        self.newsline['Weather'] = self.newsline['Weather'].apply(
+            lambda x: Converter.cleansing_weather(x))
 
     def append(self, parser):
         """
@@ -147,4 +168,5 @@ class Parser():
             html_path = Config.get_download_path(html_file)
             parser = Parser(point).parse_html(html_path)
             self.append(parser)
+        self.cleansing_fishing_summary()
         self.export()

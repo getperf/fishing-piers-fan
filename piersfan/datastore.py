@@ -39,6 +39,15 @@ class Datastore:
         ]
         self.load_counts = dict()
 
+    def get_table_names(self):
+        """
+        テーブル名のリストを返します
+        """
+        table_names = list()
+        for table in self.tables:
+            table_names.append(table.table_name)
+        return table_names
+
     def reset_load_file(self, filename):
         """
         CSV ロードファイルを削除します

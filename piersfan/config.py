@@ -54,6 +54,11 @@ class Config:
         return Config._get_path("data.datastore", filename)
 
     @staticmethod
+    def get_export_path(tablename):
+        filename = "{}.csv".format(tablename)
+        return Config._get_path("data.export", filename)
+
+    @staticmethod
     def get_download_path(filename):
         return Config._get_path("data.download", filename)
 
@@ -76,6 +81,10 @@ class Config:
     @staticmethod
     def get_config_path(config_file='config.toml'):
         return Config._get_path("data", config_file)
+
+    @staticmethod
+    def get_ap_log_path(log_file='yfp.log'):
+        return Config._get_path("data", log_file)
 
     @staticmethod
     def list_download_dirs():

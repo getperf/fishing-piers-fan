@@ -1,6 +1,7 @@
 import logging
 import re
 import unicodedata
+import jpholiday
 from datetime import datetime
 from dateutil import parser
 
@@ -41,10 +42,10 @@ class Converter:
         """
         HTML 釣果テーブルから各セル値を抽出し、辞書に登録します
         """
-        comment = unicodedata.normalize("NFKD", comment)
+        comment = unicodedata.normalize("NFC", comment)
         m = re.search(r'合計\s*(\d+)\s*匹', comment)
         if m:
-            values['Count'] = int(m.groups()[0])
+            values['Count'] = float(m.groups()[0])
             return
 
         # 最大、最小魚種サイズの抽出。25～30 cm
@@ -89,10 +90,10 @@ class Converter:
         HTML コメントから、コメントと時刻を抽出し、辞書に登録します
         """
         """空白を整形し、削除する"""
-        text = unicodedata.normalize("NFKD", text)
+        text = unicodedata.normalize("NFC", text)
         text = text.replace('\n', '')
         comments['Comment'] = text
-        m = re.search(r'\(.+?([0-9]+):([0-9]+)\)', text)
+        m = re.search(r'[\(（].+?([0-9]+):([0-9]+)[\)）]', text)
         if m:
             time_label = ':'.join(m.groups())
             date = comments['Date']
@@ -105,3 +106,80 @@ class Converter:
             except ValueError:
                 comments['Time'] = date
                 _logger.warning("parse time failed : {}".format(time_label))
+        else:
+            comments['Time'] = comments['Date']
+
+    @staticmethod
+    def clensing_summary_comment(comment):
+        """
+        釣果サマリコメントから不要な文を取り除く
+        """
+
+        """箇条書きで始まる箇所からそれ以降の文は除く"""
+        comment = unicodedata.normalize("NFC", comment)
+        lines = re.split(r'[【■★※＊]', comment)
+        if lines:
+            comment = lines[0]
+
+        """定型文は除く"""
+        lines = re.split(r'[。\n]', comment)
+        comment2 = ''
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if re.search(r'本日(.+)ご来場', line):
+                # print("HIT1")
+                continue
+            elif re.search(r'(お待ちして|What\'sNew|カード|提示|事前予約|急激に暗く|駐車)', line):
+                continue
+            else:
+                comment2 += line + "。"
+        if len(comment2) > 0:
+            comment = comment2
+        return comment
+
+    @staticmethod
+    def clensing_newsline_comment(comment):
+        """
+        釣果サマリコメントから不要な文を取り除く
+        """
+        comment = unicodedata.normalize("NFC", comment)
+        lines = re.split(r'[【■★※＊]', comment)
+        if lines:
+            comment = lines[0]
+
+        """定型文は除く"""
+        lines = re.split(r'[。\n]', comment)
+        comment2 = ''
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if re.search(r'本日(.+)ご来場', line):
+                # print("HIT1")
+                continue
+            elif re.search(r'(おはよう|交通|営業時間|ご来場|急激に暗く|カード|駐車|予約|受付|入場)', line):
+                continue
+            else:
+                comment2 += line + "。"
+        if len(comment2) > 0:
+            comment = comment2
+
+        return comment
+
+    @staticmethod
+    def get_biz_day(Date):
+        if Date.weekday() >= 5 or jpholiday.is_holiday(Date):
+            return 'Holiday'
+        else:
+            return 'WeekDay'
+
+    @staticmethod
+    def cleansing_weather(weather):
+        """
+        天気シノニムを整形する
+        """
+        if weather == '晴れ':
+            return '晴'
+        elif weather == '曇り':
+            return '曇'
+        return weather

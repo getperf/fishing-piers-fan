@@ -18,6 +18,8 @@ from piersfan.config import Config
 from piersfan.downloader import Download
 from piersfan.parser import Parser
 from piersfan.datastore import Datastore
+from piersfan.exporter import Exporter
+from piersfan.master_loader import MasterLoader
 
 
 Description='''
@@ -38,7 +40,11 @@ class YFPFan():
         self.page = args.page
         self.init = args.init
         self.keep = args.keep
+        self.log_enable = args.log
         self.show = args.show
+        self.export = args.export
+        self.time = args.time
+        self.loadmaster = args.loadmaster
 
     def parser(self):
         """
@@ -56,27 +62,49 @@ class YFPFan():
                             help = "initialize database")
         parser.add_argument("-k", "--keep", action="store_true", 
                             help = "keep old download files")
+        parser.add_argument("-l", "--log", action="store_true", 
+                            help = "write log to file")
         parser.add_argument("-s", "--show", action="store_true", 
                             help = "show config parameter")
+        parser.add_argument("-e", "--export", action="store_true",
+                            help = "export csv data")
+        parser.add_argument("--loadmaster", action="store_true",
+                            help = "import master data")
+        parser.add_argument("-t", "--time", type = str,
+                            default="1day",
+                            help = "time period to export")
         return parser.parse_args()
 
     def main(self):
         """
         メイン処理。コマンド引数別に処理する
         """
+        args = self.parser()
+        self.set_envoronment(args)
+        log_path = None
+        if self.log_enable:
+            log_path = Config.get_ap_log_path()
         logging.basicConfig(
+            filename=log_path,
             level=getattr(logging, 'INFO'),
             format='%(asctime)s [%(levelname)s] %(module)s %(message)s',
             datefmt='%Y/%m/%d %H:%M:%S',
         )
-        args = self.parser()
-        self.set_envoronment(args)
         if self.show:
             Config.show_config()
             return
 
+        elif self.export:
+            Exporter().run(self.time)
+
+        elif self.loadmaster:
+            loader = MasterLoader().load_config()
+            if loader:
+                loader.run()
+
         elif self.init:
             Datastore().reset_database()
+            MasterLoader().load_config().run()
             Download().reset_download()
             return
 

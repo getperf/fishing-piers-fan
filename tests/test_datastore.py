@@ -1,4 +1,6 @@
 import os
+import sys
+import pytest
 
 from piersfan.config import Config
 from piersfan.datastore import Datastore
@@ -23,7 +25,8 @@ def test_reset_loadfile():
     datastore = Datastore(TEST_DB).reset_load_files()
     assert datastore.load_counts == {'choka.csv': 0, 'comment.csv': 0, 'newsline.csv': 0}
 
-
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="does not run on windows")
 def test_initial_export():
     datastore = Datastore(TEST_DB).reset_database()
     html_path = Config.test_resource("daikoku1.html")
@@ -33,6 +36,8 @@ def test_initial_export():
     assert datastore.load_counts == {'choka.csv': 12, 'comment.csv': 1, 'newsline.csv': 9}
 
 
+@pytest.mark.skipif(sys.platform == 'win32',
+                    reason="does not run on windows")
 def test_append_load():
     datastore = Datastore(TEST_DB).reset_database()
     parser = Parser("daikoku").parse_html(Config.test_resource("daikoku1.html"))

@@ -1,9 +1,11 @@
+import re
 import datetime
 
+from piersfan.config import Config
 from piersfan.converter import Converter
 
 
-# py.test tests/test_converter.py -v --capture=no -k test_get_cell_value
+# py.test tests/test_converter.py -v --capture=no -k test_get_biz_day
 
 def test_get_header():
     headers = dict()
@@ -50,3 +52,45 @@ def test_get_comment_time_error():
     comments = dict(Date=datetime.datetime(2021, 4, 12, 0, 0))
     Converter.get_comment("""(磯子4/1912:04)""", comments)
     assert comments['Time'] == datetime.datetime(2021, 4, 12, 0, 0)
+
+def test_get_comment_nfd():
+    comments = dict(Date=datetime.datetime(2021, 4, 12, 0, 0))
+    str = "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"
+    Converter.get_comment(str, comments)
+    assert comments['Comment'] == "アジ、イワシ、ウミタナゴ、カサゴ、コノシロ、メバル"
+
+def test_cleansing_comment():
+    comment_path = Config.test_resource("comment1.txt")
+    f = open(comment_path, encoding='utf-8')
+    comment = f.read()
+    f.close()
+    comment = Converter.clensing_summary_comment(comment)
+    assert comment
+    print(comment)
+
+    comment_path = Config.test_resource("comment2.txt")
+    f = open(comment_path, encoding='utf-8')
+    comment = f.read()
+    f.close()
+    comment2 = Converter.clensing_summary_comment(comment)
+    assert comment2
+    print(comment2)
+
+def test_get_biz_day():
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 1, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 2, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 3, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 4, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 5, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 6, 0, 0)) == "WeekDay"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 7, 0, 0)) == "WeekDay"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 8, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 9, 0, 0)) == "Holiday"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 10, 0, 0)) == "WeekDay"
+    assert Converter.get_biz_day(datetime.datetime(2021, 5, 11, 0, 0)) == "WeekDay"
+
+def test_cleansing_weather():
+    assert Converter.cleansing_weather('曇り') == "曇"
+    assert Converter.cleansing_weather('晴れ') == "晴"
+    assert Converter.cleansing_weather('晴れのち曇り') == "晴れのち曇り"
+

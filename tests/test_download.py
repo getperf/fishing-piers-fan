@@ -1,4 +1,4 @@
-from piersfan.download import Download
+from piersfan.downloader import Download
 from piersfan.config import Config
 
 
@@ -29,9 +29,9 @@ def test_html_no_data():
     assert not download.page_found
 
 
-def test_run():
-    download = Download().load_config()
-    download.run(0)
+# def test_run():
+#     download = Download().load_config()
+#     download.run(0)
 
 # def test_getFormData():
 #     download = Download()
