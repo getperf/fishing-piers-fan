@@ -109,7 +109,7 @@ conn = sqlite3.connect("{SQLite3データベースパス}")
 
 ## データベースモデル
 
-データベースは以下の３つのテーブルから構成します。
+データベースの主要なテーブルは以下の３つのテーブルとなります。
 SQL を用いてこれらテーブルを検索します。
 
   ![ER図](docs/erd.drawio.png)
@@ -146,6 +146,13 @@ SQL を用いてこれらテーブルを検索します。
 * カラム : 
     * Comment(コメント), Weather(天気)
 
+## PowerBI によるデータ分析
+
+Miscrosoft 製 PowerBI を用いて釣果データベースの分析を行います。
+
+* セットアップ手順； [PowerBIセットアップ](./docs/setup_powerbi.md)
+* 利用手順 ブログ；[横浜フィッシングピアーズ海釣り施設、釣果分析2](https://mon3nr.github.io/blog1/blog/yfpreserch02/)
+
 ## 注意事項
 
 横浜フィッシングピアーズホームページデータの二次利用について、動画、画像を除くテキスト情報の利用は特に規定はなく、
@@ -161,7 +168,7 @@ SNSへ動画や記事を掲載する場合も、同様に事前のお申込み�
 ## Refference
 
 1. [横浜フィッシングピアーズ](http://daikoku.yokohama-fishingpiers.jp/index.php)
-2. [自転車散歩、釣り記録](http://daikoku.yokohama-fishingpiers.jp/index.php)
+2. [自転車散歩、釣り記録](https://mon3nr.github.io/blog1/)
 
 ## COPYRIGHT
 
