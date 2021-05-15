@@ -15,14 +15,15 @@ Microsoft 製 PowerBI を用いて fishing-piers-fan の釣果データベース
 http://www.ch-werner.de/sqliteodbc
 ```
 
-以下の記述のCurrent version のリストから、以下の32ビット版をダウンロードします。
+以下の記述のCurrent version のリストから、以下の32ビット版、64ビット版の両方をダウンロード
 
 ```
 Current version
-sqliteodbc.exe     # 32bit版
+sqliteodbc.exe     # 32ビット版
+sqliteodbc_w64.exe # 64ビット版
 ```
 
-PowerBIは 64 bit 版 でも 32bit 版の ODBC ドライバを使用します。
+PowerBIは 64 ビット版 は、64 ビットのODBC ドライバを使用しますが、設定は 32ビット版の ODBC ドライバを使用するため、両ドライバーをインストールします。
 
 ダウンロードしたインストールファイルを起動し、既定の設定のままインストールを実行します。
 
