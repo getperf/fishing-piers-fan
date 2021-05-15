@@ -15,4 +15,3 @@ SQLAlchemy~=1.4.9
 seaborn
 jupyter
 janome
-wordcloud

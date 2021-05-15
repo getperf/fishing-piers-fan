@@ -1,9 +1,12 @@
-<<<<<<< HEAD
 venv/
 Scripts/
+Include/
+etc/
+share/
 .idea/
 .vscode/
 pyenv.cfg
+pyvenv.cfg
 *.zip
 *.tar.gz
 data/*.db
@@ -294,4 +297,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
->>>>>>> origin/master

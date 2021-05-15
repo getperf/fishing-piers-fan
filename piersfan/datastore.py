@@ -36,19 +36,19 @@ class Datastore:
         self.tables = [
             Table('fishing_results', 
                 ['Date', 'Point', 'Species'], 
-                dict(id=0,Date="",Point="",Species="",
-                    Count=0.0,SizeMin=0.0,SizeMax=0.0,
-                    WeightMin=0.0,WeightMax=0.0,Comment="",Place=""),
+                dict(index=0, Date="", Point="", Species="", 
+                    Count=0.0, SizeMin=0.0, SizeMax=0.0, 
+                    WeightMin=0.0, WeightMax=0.0, Comment="", Place=""),
                 'choka.csv'),
             Table('fishing_comments', 
                 ['Date', 'Point'], 
-                dict(id=0,Date="",Point="",Weather="",
-                    WaterTemp=0.0,Quantity=0.0,
-                    Comment="",Tide="",Time="",Summary="",BizDay=""),
+                dict(index=0, Date="", Point="", Weather="", 
+                    WaterTemp=0.0, Quantity=0.0, 
+                    Comment="", Tide="", Time="", Summary="", BizDay=""),
                 'comment.csv'),
             Table('fishing_newslines', 
                 ['Date', 'Time', 'Point'], 
-                dict(id=0, Date="",Time="",Point="",Comment="",Weather=""),
+                dict(index=0, Date="", Time="", Point="", Comment="", Weather=""),
                 'newsline.csv'),
         ]
         self.load_counts = dict()
@@ -89,6 +89,7 @@ class Datastore:
         for table in self.tables:
             tbl = self.db[table.table_name]
             tbl.insert(table.rows)
+            tbl.delete()
         return self
 
     def create_index(self, table_name, index_columns):
