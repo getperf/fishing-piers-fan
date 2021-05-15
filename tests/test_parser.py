@@ -2,7 +2,7 @@ from piersfan.parser import Parser
 from piersfan.config import Config
 
 
-# py.test tests/test_parser.py -v --capture=no -k test_daikoku_html_parser2
+# py.test tests/test_parser.py -v --capture=no -k test_honmoku_html_parseer2
 
 def test_not_found():
     html_path = Config.test_resource("not_found1.html")
@@ -56,6 +56,13 @@ def test_honmoku_html_parseer():
     assert timestamps['choka']
     assert timestamps['newsline']
 
+def test_honmoku_html_parseer2():
+    html_path = Config.test_resource("honmoku2.html")
+    parser = Parser("honmoku").parse_html(html_path)
+    timestamps = parser.get_timestamps()
+    print(parser.choka)
+    # assert timestamps['choka']
+    # assert timestamps['newsline']
 
 def test_export():
     html_path = Config.test_resource("daikoku1.html")

@@ -15,8 +15,7 @@ Microsoft 製 PowerBI を用いて fishing-piers-fan の釣果データベース
 http://www.ch-werner.de/sqliteodbc
 ```
 
-以下の記述のCurrent version のリストから、
-以下の32ビット板、64ビット版の両方をダウンロード
+以下の記述のCurrent version のリストから、以下の32ビット版をダウンロードします。
 
 ```
 Current version
