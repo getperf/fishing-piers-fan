@@ -15,13 +15,14 @@ _logger = logging.getLogger(__name__)
 
 
 class Table:
-    def __init__(self, table_name, index_columns, csv):
+    def __init__(self, table_name, index_columns, rows, csv):
         """
         データベースに登録するモデルの属性を定義します
         """
         self.table_name = table_name
         self.index_columns = index_columns
         self.csv = csv
+        self.rows = rows
 
 
 class Datastore:
@@ -33,9 +34,22 @@ class Datastore:
         db = ds.connect('sqlite:///{}'.format(self.db_path))
         self.db = db
         self.tables = [
-            Table('fishing_results', ['Date', 'Point', 'Species'], 'choka.csv'),
-            Table('fishing_comments', ['Date', 'Point'], 'comment.csv'),
-            Table('fishing_newslines', ['Date', 'Time', 'Point'], 'newsline.csv'),
+            Table('fishing_results', 
+                ['Date', 'Point', 'Species'], 
+                dict(id=0,Date="",Point="",Species="",
+                    Count=0.0,SizeMin=0.0,SizeMax=0.0,
+                    WeightMin=0.0,WeightMax=0.0,Comment="",Place=""),
+                'choka.csv'),
+            Table('fishing_comments', 
+                ['Date', 'Point'], 
+                dict(id=0,Date="",Point="",Weather="",
+                    WaterTemp=0.0,Quantity=0.0,
+                    Comment="",Tide="",Time="",Summary="",BizDay=""),
+                'comment.csv'),
+            Table('fishing_newslines', 
+                ['Date', 'Time', 'Point'], 
+                dict(id=0, Date="",Time="",Point="",Comment="",Weather=""),
+                'newsline.csv'),
         ]
         self.load_counts = dict()
 
@@ -67,11 +81,14 @@ class Datastore:
 
     def reset_database(self):
         """
-        SQLite3 データベースファイルを削除します
+        SQLite3 データベースファイルを削除し、再作成します
         """
         _logger.info("initialize {}".format(self.db_path))
         if os.path.exists(self.db_path):
             os.remove(self.db_path)
+        for table in self.tables:
+            tbl = self.db[table.table_name]
+            tbl.insert(table.rows)
         return self
 
     def create_index(self, table_name, index_columns):
