@@ -5,7 +5,7 @@ Microsoft 製 PowerBI を用いて fishing-piers-fan の釣果データベース
 ## 事前準備
 
 * Windows 10 64bit 環境が必要です。
-* PowerBI の SQLlite3 接続用に、SQLite3 ODBC ドライバーのインストールが必要です。
+* PowerBI の SQLlite3 接続用に、32bit 版 SQLite3 ODBC ドライバーのインストールが必要です。
 
 ## SQLite3 ODBC ドライバーインストール
 
@@ -21,15 +21,11 @@ http://www.ch-werner.de/sqliteodbc
 ```
 Current version
 sqliteodbc.exe     # 32bit版
-sqliteodbc_w64.exe # 64bit版
 ```
 
-PowerBIは 64 bit 版 ODBC ドライバを使用しますが、
-ODBC の設定には 32bit 版 ODBC が必要なので、32bit, 64bit の
-両バージョンをインストールします。
+PowerBIは 64 bit 版 でも 32bit 版の ODBC ドライバを使用します。
 
-ダウンロードしたインストールファイルをそれぞれ起動し、
-既定の設定のままインストールを実行します。
+ダウンロードしたインストールファイルを起動し、既定の設定のままインストールを実行します。
 
 ## ODBC 接続設定
 
