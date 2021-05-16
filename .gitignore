@@ -10,6 +10,7 @@ pyvenv.cfg
 *.zip
 *.tar.gz
 data/*.db
+notebook/*0.*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
