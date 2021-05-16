@@ -86,6 +86,12 @@ class Datastore:
         _logger.info("initialize {}".format(self.db_path))
         if os.path.exists(self.db_path):
             os.remove(self.db_path)
+
+        """Table.rows のカラム定義を基にテーブルを作成します。
+        dataset.insert(columns)でテーブルの作成をしますが、カラム値がNoneの場合は、
+        テキストのカラムでも誤ってFloat 型で初期化されてしまいます。
+        回避するために一旦、Table.rowsで定義されたレコードを登録して、テーブル
+        を作成し、その後レコードを削除する処理を追加します。"""
         for table in self.tables:
             tbl = self.db[table.table_name]
             tbl.insert(table.rows)
