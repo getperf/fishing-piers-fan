@@ -1,0 +1,94 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 396.7
+          },
+          "nodeIndex": "施設",
+          "size": {
+            "height": 173,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 560.5,
+            "y": 201
+          },
+          "nodeIndex": "日付",
+          "size": {
+            "height": 213,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 649,
+            "y": 454
+          },
+          "nodeIndex": "魚種釣果",
+          "size": {
+            "height": 337,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 834.5,
+            "y": 107
+          },
+          "nodeIndex": "狙い目",
+          "size": {
+            "height": 173,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 274,
+            "y": 285
+          },
+          "nodeIndex": "サマリ",
+          "size": {
+            "height": 337,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 226,
+            "y": 0
+          },
+          "nodeIndex": "速報",
+          "size": {
+            "height": 245,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "すべてのテーブル",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "すべてのテーブル",
+  "defaultDiagram": "すべてのテーブル"
+}

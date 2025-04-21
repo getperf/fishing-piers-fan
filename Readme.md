@@ -5,11 +5,9 @@
 横浜フィッシングピアーズホームページから釣果情報を抽出してデータベースを作成します。
 データベースを分析することで釣行計画に利用します。
 
-![アジ分析例](docs/sample_report1.png)
+**「魚種別釣果の傾向分析（Power BI）」**
 
-釣果分析のブログ記事があります。
-
-https://mon3nr.github.io/blog1/
+![アジ釣果分析例(PowrBI)](docs/sample_powerbi.png)
 
 ## インストール
 
@@ -30,82 +28,97 @@ python -m pip install --force-reinstall -e .
 
 ## 使用方法
 
-*yfp --init* コマンドを使用して、データベースを初期化します。
+### 初期ロード
 
-```
+データベースを初期化するには、以下のコマンドを実行します：  
+
+```shell
 yfp --init
 ```
 
-釣果データの抽出・ロードを実行します。既定の設定だと、当月分のホームページからデータを抽出してロードします。
+次に、指定した日数より前の釣果データを抽出・ロードするには、以下のように `--day` オプションを使用します（例：過去90日分）：  
 
-```
-yfp
-```
-
---page {値} で直近のページから何ページ目までをダウンロードするかを指定します。
-データベースへのロードは、更新があった差分データのみマージしてロードします。
-
-```
-# 直近の10ページまでを取得してロード
-yfp --page 10  
+```shell
+yfp --day 90
 ```
 
---month オプションで何カ月前からのページから巡回するかを指定します。
+`--day` オプションを省略すると、前回実行日以降の新しいデータのみを抽出・ロードします。  
 
-```
-# 過去3年分の取得とロード
-yfp --month 36 
-```
+### タスクスケジューラの設定（Windows）
+
+本プロジェクトには、日次で `yfp` コマンドを自動実行するためのスクリプトが含まれています。以下のファイルが `script` ディレクトリにあります：  
+
+- `run_task.bat`
+
+  タスクスケジューラへの登録用バッチ（毎日午前6時に実行）  
+
+- `run_yfp.bat`
+
+  `yfp` コマンドを起動するバッチ（Python 仮想環境を事前にアクティベート）  
+
+- `run_yfp.vbs`
+
+  バッチ実行時に黒いコマンドプロンプト画面を表示させないためのVBSスクリプト  
+
+⚠ **注意**  
+
+これらのスクリプトには、プロジェクトのパスが `C:\home\python\yfp\fishing-piers-fan` にハードコーディングされています。  
+実際のインストールディレクトリに合わせてパスを編集してください。  
+パスを修正後、**管理者権限**で `run_task.bat` を実行すると、タスクがスケジュール登録されます。  
 
 > **注意事項**
 >
 >  横浜フィッシングピアーズの1年分の釣果ページ数は数千ページになります。
---month オプションで長期間のダウンロードをする場合は、
+--day オプションで長期間のダウンロードをする場合は、
 夜間に実行する、巡回インターバルを長くするなど、サイトへの負荷影響を意識して実行してください。
 
---show オプションでデータベースファイルなどのディレクトリ構成情報を出力します。
+## PowerBI によるデータ分析
 
-```
-yfp --show
-```
+Miscrosoft 製 PowerBI を用いて釣果データベースの分析を行います。
 
-後述の jupyter notebook でのデータ分析では、本コマンドで表示された、データベースファイルパスを指定します。
+* セットアップ手順； [PowerBIセットアップ](./docs/setup_powerbi.md)
+* 利用手順 ブログ；[横浜フィッシングピアーズ海釣り施設、釣果分析2](https://mon3nr.github.io/blog1/blog/yfpreserch02/)
 
-これらの設定は、 **{project_dir}/data/config.toml** に記述します。
+## Python によるデータ分析
 
-## 分析チュートリアル
+釣果分析のブログ記事があります。
 
-**notebook** ディレクトリ下に jupyter notebook のサンプルレポートがあるので、本レポートを開いて利用方法を確認してください。
+https://mon3nr.github.io/blog1/
 
-jupyter notebook を起動します。
+このプロジェクトでは、Jupyter Notebook を使って釣果データの分析を行います。VSCode 環境での実行を推奨します。  
 
-```
-cd {インストール先}/fishing-piers-fan
-jupyter notebook
-```
+### 推奨環境
 
-Web ブラウザが起動され、Jupyter notebook のホームページが表示されます。
+[Visual Studio Code](https://code.visualstudio.com/)
 
->  **注意事項**
->
-> Linux 環境の場合は、ログメッセージに出力された URL を Web ブラウザに入力してください。
+VSCode 拡張機能:
+	- Python（ms-python.python）
+	- Jupyter（ms-toolsai.jupyter）
 
-リストからディレクトリ **notebook** を選択し、
- **sample1.ipynb** を開きます。
+### 🛠 セットアップ手順（簡易版）
 
-Juptyer notebook とのインターフェースは、ロードした 
-SQLite3 データベースのみになります。SQLite3 データベースのパスを確認する場合は以下を実行してください。
+- VSCode を起動
+- Python & Jupyter 拡張をインストール
+- VSCode で `<ホームディレクトリ>/notebook/` を開く
+- 任意の `.ipynb` ノートブックを開いて、セルを順に実行
+  
+※ 必要に応じて `requirements.txt` または `pip install pandas matplotlib seaborn` などで依存パッケージをインストールしてください。  
 
-```
-from piersfan.config import Config
-print(Config.get_db_path())
-```
+### 分析用ノートブック一覧
+  
+以下の Jupyter Notebook ファイルが含まれています：  
 
-表示された SQLite3 データベースパスを指定して、データベースに接続します。
+| ファイル名 | 内容概要 |
+|---|---|
+| `aji_analysis.ipynb` | アジ全体の釣果分析 |
+| `comment_analysis.ipynb` | 釣果コメントのワード頻出分析 |
+| `comment_analysis2.ipynb` | コメント内の感情・傾向分析（改良版） |
+| `daikoku_aji_analysis.ipynb` | 大黒埠頭におけるアジの釣果傾向 |
+| `daikoku_bizday_analysis.ipynb` | 大黒埠頭の平日・休日別来訪傾向分析 |
+| `daikoku_kurodai_analysis.ipynb` | 黒鯛（チヌ）の釣果動向（大黒） |
+| `daikoku_vistors_analysis.ipynb` | 来訪者数の推移と傾向分析（大黒） |
+| `shiriyake_ika_analysis.ipynb` | シリヤケイカの時期別出現分析 |
 
-```
-conn = sqlite3.connect("{SQLite3データベースパス}")
-```
 
 ## データベースモデル
 
@@ -146,20 +159,13 @@ SQL を用いてこれらテーブルを検索します。
 * カラム : 
     * Comment(コメント), Weather(天気)
 
-## PowerBI によるデータ分析
-
-Miscrosoft 製 PowerBI を用いて釣果データベースの分析を行います。
-
-* セットアップ手順； [PowerBIセットアップ](./docs/setup_powerbi.md)
-* 利用手順 ブログ；[横浜フィッシングピアーズ海釣り施設、釣果分析2](https://mon3nr.github.io/blog1/blog/yfpreserch02/)
-
 ## 注意事項
 
 横浜フィッシングピアーズホームページデータの二次利用について、動画、画像を除くテキスト情報の利用は特に規定はなく、
 一般的な常識の範囲内での利用は問題ないとの回答がありました。
 ただし、ブログなどに掲載する場合は事前申請が必要になります。詳細は以下URLを参照してください。
 
-http://daikoku.yokohama-fishingpiers.jp/use.php
+https://yokohama-fishingpiers.jp/honmoku/user-guide/?index=3
 
 > 施設内で撮影（写真・動画）を行なう際には、事前に施設に許可申請が必要です。
 SNSへ動画や記事を掲載する場合も、同様に事前のお申込みをお願い致します。
@@ -172,7 +178,7 @@ SNSへ動画や記事を掲載する場合も、同様に事前のお申込み�
 
 ## COPYRIGHT
 
-Copyright 2021, Minoru Furusawa <mon3nr@gmail.com>
+Copyright 2021-2025, Minoru Furusawa <mon3nr@gmail.com>
 
 ## LICENSE
 

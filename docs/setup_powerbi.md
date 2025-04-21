@@ -4,7 +4,7 @@ Microsoft 製 PowerBI を用いて fishing-piers-fan の釣果データベース
 
 ## 事前準備
 
-* Windows 10 64bit 環境が必要です。
+* Windows 10 以上の 64bit 環境が必要です。
 * PowerBI の SQLlite3 接続用に、32bit 版 SQLite3 ODBC ドライバーのインストールが必要です。
 
 ## SQLite3 ODBC ドライバーインストール
@@ -37,7 +37,7 @@ C:\Windows\SysWOW64\odbcad32.exe
 
 ユーザ DNSから追加をクリックし、セットアップするドライバーリストから、SQLite3 ODBC Driver を選択します。
 
-Data Source Name に fishing_result を入力して、OK をクリックします。
+Data Source Name に 「fishing_result」 を入力して、OK をクリックします。
 
 設定はこれで終了です。Data Source Name 以外の設定は不要です。
 
@@ -66,7 +66,7 @@ Windows スタートメニューから、Microsft Power BI Desktop を起動し�
 他のレポートを開くを選択し、以下のパスの釣果情報分析レポートファイルを開きます。
 
 ```
-{fishing_piers_fanホーム}/notebook/yfpresearch1.pbix
+{fishing_piers_fanホーム}/powerbi/yfpresearch1.pbix
 ```
 
 ## PowerBI DB接続設定(初回のみ必要)
@@ -84,6 +84,20 @@ PowerBI のメニューから、ファイル、オプションと機能の設定
 
 ```
 database={fishing_piers_fanホーム}/data/fishing_result.db
+```
+
+**注意：** 
+
+パスが不明な場合は、以下のコマンドで確認してください。
+
+実行コマンド：
+```shell
+yfp -s
+```
+
+実行結果例：
+```
+database=c:\home\python\yfp\fishing-piers-fan\data\fishing_result.db
 ```
 
 サポートされている行の削減句に LIMIT を選択します。

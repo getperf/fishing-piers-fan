@@ -13,7 +13,7 @@ from piersfan.config import Config
 #     巡回して取得したページの日付が前回の最終更新日付よりも古ければ終了する
 
 def test_get_url():
-    assert Config.get_url("daikoku") == 'http://daikoku.yokohama-fishingpiers.jp/choka.php'
+    assert Config.get_url() == 'https://yokohama-fishingpiers.jp/'
 
 
 def test_get_download_file():

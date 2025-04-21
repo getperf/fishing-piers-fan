@@ -1,0 +1,100 @@
+table 魚種釣果
+	lineageTag: 105179db-be08-4670-a986-6e989ce5b290
+
+	column 魚種
+		dataType: string
+		lineageTag: 90de4326-a4bd-417d-baf5-7276d5c7319d
+		summarizeBy: none
+		sourceColumn: 魚種
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 釣果数
+		dataType: int64
+		lineageTag: e4b5ab6a-47cb-4d9f-9e44-eb6572063bc1
+		summarizeBy: sum
+		sourceColumn: 釣果数
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 日付
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: f94319f5-59b6-4877-977f-ae9f1c90d322
+		summarizeBy: none
+		sourceColumn: 日付
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 施設ID
+		dataType: string
+		isHidden
+		lineageTag: 34731378-afd0-416c-963b-091e0ac83cdc
+		summarizeBy: none
+		sourceColumn: 施設ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column サイズ最小
+		dataType: decimal
+		formatString: #,0.0
+		lineageTag: 997f68b9-440f-4963-ae12-3271503d7712
+		summarizeBy: sum
+		sourceColumn: サイズ最小
+
+		annotation SummarizationSetBy = Automatic
+
+	column サイズ最大
+		dataType: decimal
+		formatString: #,0.0
+		lineageTag: a61a4a59-b0ad-4f50-bc91-17ac7b24118c
+		summarizeBy: sum
+		sourceColumn: サイズ最大
+
+		annotation SummarizationSetBy = Automatic
+
+	column id
+		dataType: double
+		lineageTag: 42c426e2-0253-4147-b79e-9744ea1cf589
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 魚種釣果-582cfc92-5cff-4732-8362-17b2dfd77e87 = m
+		mode: import
+		source =
+				let
+				    ソース = Odbc.DataSource("database=c:\home\python\yfp\fishing-piers-fan\data\fishing_result.db;dsn=SQLite3 Datasource", [HierarchicalNavigation=true, SqlCapabilities=[LimitClauseKind=LimitClauseKind.Limit]]),
+				    fishing_results_Table = ソース{[Name="fishing_results",Kind="Table"]}[Data],
+				    削除された列 = Table.RemoveColumns(fishing_results_Table,{"index"}),
+				    変更された型 = Table.TransformColumnTypes(削除された列,{{"Date", type date}}),
+				    #"名前が変更された列 " = Table.RenameColumns(変更された型,{{"Point", "施設ID"}, {"Species", "魚種"}, {"Count", "釣果数"}, {"SizeMin", "魚種サイズ最小"}, {"SizeMax", "魚種サイズ最大"}, {"WeightMin", "魚種重さ最小"}, {"WeightMax", "魚種重さ最大"}, {"Comment", "コメント(未使用)"}, {"Place", "場所(未使用)"}, {"Date", "日付"}}),
+				    追加されたカスタム = Table.AddColumn(#"名前が変更された列 ", "サイズ最小", each if [魚種サイズ最小]=null then [魚種重さ最小] else [魚種サイズ最小]),
+				    追加されたカスタム1 = Table.AddColumn(追加されたカスタム, "サイズ最大", each if [魚種サイズ最大]=null then [魚種重さ最大] else [魚種サイズ最大]),
+				    削除された列1 = Table.RemoveColumns(追加されたカスタム1,{"魚種サイズ最小", "魚種サイズ最大", "魚種重さ最小", "魚種重さ最大", "コメント(未使用)", "場所(未使用)"}),
+				    変更された型1 = Table.TransformColumnTypes(削除された列1,{{"サイズ最小", Currency.Type}, {"サイズ最大", Currency.Type}})
+				in
+				    変更された型1
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = ナビゲーション
+

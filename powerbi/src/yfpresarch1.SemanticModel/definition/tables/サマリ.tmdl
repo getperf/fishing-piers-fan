@@ -1,0 +1,142 @@
+table サマリ
+	lineageTag: 81b26b23-30c7-4d45-bc56-c4872c2d0179
+
+	column 1日の天気
+		dataType: string
+		lineageTag: c839ee39-fa4e-4542-b28b-4b5834b3c7cb
+		summarizeBy: none
+		sourceColumn: 1日の天気
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 海水温
+		dataType: double
+		lineageTag: d27ed368-79fc-4d38-8b43-cc9554f9e640
+		summarizeBy: sum
+		sourceColumn: 海水温
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 入場者数
+		dataType: double
+		lineageTag: 8cbf2eef-6f72-46fa-a7a7-89f174f1e45a
+		summarizeBy: sum
+		sourceColumn: 入場者数
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 釣果コメント(未整形)
+		dataType: string
+		lineageTag: 95cd9fc8-0050-4d7a-9391-50fbc74c1aa9
+		summarizeBy: none
+		sourceColumn: 釣果コメント(未整形)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 潮
+		dataType: string
+		isHidden
+		lineageTag: 52fe1b63-f4f5-4460-9ceb-373d705bf96e
+		summarizeBy: none
+		sourceColumn: 潮
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 時刻
+		dataType: string
+		lineageTag: 5766f556-22ee-49cc-b027-23fcf1490773
+		summarizeBy: none
+		sourceColumn: 時刻
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 釣果コメント
+		dataType: string
+		lineageTag: 050d943c-10a5-4bb7-acd6-906ddc3a40b8
+		summarizeBy: none
+		sourceColumn: 釣果コメント
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 休日平日
+		dataType: string
+		isHidden
+		lineageTag: 92c6a886-1c19-4644-bc36-15b82327f737
+		summarizeBy: none
+		sourceColumn: 休日平日
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 日付
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: cd236b5b-8605-470e-9b1d-45608020570b
+		summarizeBy: none
+		sourceColumn: 日付
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 施設ID
+		dataType: string
+		isHidden
+		lineageTag: 5d36856e-a0d9-44ee-bdd9-83b0837953b2
+		summarizeBy: none
+		sourceColumn: 施設ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column id
+		dataType: double
+		lineageTag: dcfe3029-1157-4423-9fe4-091622062fae
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition サマリ-c35eb206-790c-4a25-bf25-be3cbf1f914e = m
+		mode: import
+		source =
+				let
+				    ソース = Odbc.DataSource("database=c:\home\python\yfp\fishing-piers-fan\data\fishing_result.db;dsn=SQLite3 Datasource", [HierarchicalNavigation=true, SqlCapabilities=[LimitClauseKind=LimitClauseKind.Limit]]),
+				    fishing_comments_Table = ソース{[Name="fishing_comments",Kind="Table"]}[Data],
+				    削除された列 = Table.RemoveColumns(fishing_comments_Table,{"index"}),
+				    変更された型 = Table.TransformColumnTypes(削除された列,{{"Date", type date}}),
+				    #"名前が変更された列 " = Table.RenameColumns(変更された型,{{"Date", "日付"}, {"Point", "施設ID"}, {"Weather", "1日の天気"}, {"WaterTemp", "海水温"}, {"Quantity", "入場者数"}, {"Comment", "釣果コメント(未整形)"}, {"Tide", "潮"}, {"Time", "時刻"}, {"Summary", "釣果コメント"}, {"BizDay", "休日平日"}})
+				in
+				    #"名前が変更された列 "
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = ナビゲーション
+

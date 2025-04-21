@@ -1,0 +1,38 @@
+table 狙い目
+	lineageTag: 83e73fed-2ae7-41af-a5f6-8a724833f4bb
+
+	column 狙い目
+		dataType: string
+		lineageTag: e55a4712-349b-4c4e-a214-850fbe4cea07
+		summarizeBy: none
+		sourceColumn: 狙い目
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 魚種
+		dataType: string
+		lineageTag: 2ced0fdf-1e0a-4adc-82a6-c909b824e3a8
+		summarizeBy: none
+		sourceColumn: 魚種
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	partition 狙い目-06a1f483-f80d-46c8-bb80-de529c9f6351 = m
+		mode: import
+		source =
+				let
+				    ソース = Odbc.DataSource("database=c:\home\python\yfp\fishing-piers-fan\data\fishing_result.db;dsn=SQLite3 Datasource", [HierarchicalNavigation=true, SqlCapabilities=[LimitClauseKind=LimitClauseKind.Limit]]),
+				    fishing_target_Table = ソース{[Name="fishing_target",Kind="Table"]}[Data],
+				    削除された列 = Table.RemoveColumns(fishing_target_Table,{"index"}),
+				    #"名前が変更された列 " = Table.RenameColumns(削除された列,{{"Target", "狙い目"}, {"Species", "魚種"}})
+				in
+				    #"名前が変更された列 "
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = ナビゲーション
+
