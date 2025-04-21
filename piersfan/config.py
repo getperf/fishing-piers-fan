@@ -9,11 +9,12 @@ Description = '''
 
 # フィッシングTV釣果情報ホームページURL
 
-UrlFishingPiers = "http://{}.yokohama-fishingpiers.jp/choka.php"
+UrlFishingPiers = "https://yokohama-fishingpiers.jp/"
 
 # HTMLダウンロードファイル保存場所
 
 DownloadDir = 'download'
+
 # CSV, SQLite3 データファイル保存場所
 
 DataDir = 'data'
@@ -42,6 +43,9 @@ header_comment = ['Date', 'Point', 'Weather', 'WaterTemp', 'Quantity', 'Comment'
 
 header_newsline = ['Date', 'Time', 'Point', 'Comment']
 
+# 施設リスト
+
+facilities = ['honmoku', 'daikoku', 'isogo']
 
 class Config:
 
@@ -52,6 +56,14 @@ class Config:
     @staticmethod
     def get_datastore_path(filename):
         return Config._get_path("data.datastore", filename)
+
+    @staticmethod
+    def get_csv(filename, facility):
+        return "{}_{}.csv".format(filename, facility)
+
+    @staticmethod
+    def get_csv_path(filename, facility):
+        return Config.get_datastore_path(Config.get_csv(filename, facility))
 
     @staticmethod
     def get_export_path(tablename):
@@ -67,8 +79,12 @@ class Config:
         return Config._get_path("tests.resources", filename)
 
     @staticmethod
-    def get_url(area_name):
-        return UrlFishingPiers.format(area_name)
+    def get_url():
+        return UrlFishingPiers
+
+    @staticmethod
+    def get_facilities():
+        return facilities
 
     @staticmethod
     def get_download_file(area_name, year, month, page=1):
@@ -100,6 +116,6 @@ class Config:
 
     @staticmethod
     def show_config():
-        print("DATABASE_PATH={}".format(Config.get_db_path()))
-        print("DEFAULT_CONFIG={}".format(Config.get_config_path()))
-        print("DOWNLOAD_DIR={}".format(Config.get_download_path("")))
+        print("database={}".format(Config.get_db_path()))
+        print("config={}".format(Config.get_config_path()))
+        print("download={}".format(Config.get_download_path("")))

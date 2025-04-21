@@ -1,0 +1,200 @@
+{
+  "config": "{\"version\":\"5.54\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY21SU04\",\"version\":\"5.20\",\"type\":2}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"linguisticSchemaSyncVersion\":2,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"exportDataMode\":1,\"useEnhancedTooltips\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}],\"outspacePane\":[{\"properties\":{\"expanded\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}}",
+  "layoutOptimization": 0,
+  "pods": [
+    {
+      "boundSection": "ReportSection69e6e0a91086f982d217",
+      "config": "{}",
+      "name": "Pod",
+      "referenceScope": 1
+    }
+  ],
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "CY21SU04",
+            "path": "BaseThemes/CY21SU04.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "釣果速報",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "163c790cdd52d6615f2c",
+      "ordinal": 2,
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"4f84ce30dc89e08b502c\",\"layouts\":[{\"id\":0,\"position\":{\"x\":9.72644376899696,\"y\":0,\"z\":0,\"width\":275.258358662614,\"height\":110.88145896656536}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"日付.日付\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Relative'\"}}},\"relativeRange\":{\"expr\":{\"Literal\":{\"Value\":\"'Last'\"}}},\"relativeDuration\":{\"expr\":{\"Literal\":{\"Value\":\"5D\"}}},\"relativePeriod\":{\"expr\":{\"Literal\":{\"Value\":\"'Days'\"}}}}}],\"dateRange\":[{\"properties\":{\"includeToday\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Between\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}},\"LowerBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":1,\"TimeUnit\":0}},\"Amount\":-5,\"TimeUnit\":0}},\"TimeUnit\":0}},\"UpperBound\":{\"DateSpan\":{\"Expression\":{\"Now\":{}},\"TimeUnit\":0}}}}}]}}}}]}}}",
+          "filters": "[]",
+          "height": 110.88,
+          "width": 275.26,
+          "x": 9.73,
+          "y": 0.00,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"a9bef56b4f537fd317f1\",\"layouts\":[{\"id\":0,\"position\":{\"x\":295.29622980251344,\"y\":0,\"z\":3000,\"width\":984.7037701974865,\"height\":692.8545780969479}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"速報.時刻\"},{\"queryRef\":\"速報.コメント\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"速\",\"Entity\":\"速報\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"速\"}},\"Property\":\"コメント\"},\"Name\":\"速報.コメント\",\"NativeReferenceName\":\"コメント\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"速\"}},\"Property\":\"時刻\"},\"Name\":\"速報.時刻\",\"NativeReferenceName\":\"時刻\"}]},\"queryOptions\":{\"keepProjectionOrder\":true},\"showAllRoles\":[\"Values\"],\"drillFilterOtherVisuals\":true,\"objects\":{\"total\":[{\"properties\":{\"totals\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}}}",
+          "filters": "[{\"name\":\"Filtercc4f4c2a92380862649a\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"サマリ\"}},\"Property\":\"釣果コメント\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"サ\",\"Entity\":\"サマリ\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"サ\"}},\"Property\":\"釣果コメント\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"null\"}}]]}}}}}]},\"type\":\"Categorical\",\"howCreated\":1,\"objects\":{\"general\":[{\"properties\":{\"isInvertedSelectionMode\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"isHiddenInViewMode\":false}]",
+          "height": 692.85,
+          "width": 984.70,
+          "x": 295.30,
+          "y": 0.00,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"fe3cdc9d487eb03a1a6a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":99.209726443769,\"z\":1000,\"width\":115.74468085106383,\"height\":115.74468085106383}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"施設.施設名\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"施\",\"Entity\":\"施設\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"施\"}},\"Property\":\"施設名\"},\"Name\":\"施設.施設名\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"施\",\"Entity\":\"施設\",\"Type\":0}],\"Where\":[{\"Condition\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"施\"}},\"Property\":\"施設名\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"'本牧'\"}}]]}}}]}}}}]}}}",
+          "filters": "[]",
+          "height": 115.74,
+          "width": 115.74,
+          "x": 0.00,
+          "y": 99.21,
+          "z": 1000.00
+        }
+      ],
+      "width": 1280.00
+    },
+    {
+      "config": "{}",
+      "displayName": "釣果コメント",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "ReportSection4493116aa037d2d49c29",
+      "ordinal": 1,
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"79f70ca1f1936cdb03d0\",\"layouts\":[{\"id\":0,\"position\":{\"x\":9.72644376899696,\"y\":0,\"z\":0,\"width\":275.258358662614,\"height\":110.88145896656536}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"日付.日付\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Relative'\"}}},\"relativeRange\":{\"expr\":{\"Literal\":{\"Value\":\"'Last'\"}}},\"relativeDuration\":{\"expr\":{\"Literal\":{\"Value\":\"5D\"}}},\"relativePeriod\":{\"expr\":{\"Literal\":{\"Value\":\"'Days'\"}}}}}],\"dateRange\":[{\"properties\":{\"includeToday\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Between\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}},\"LowerBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":1,\"TimeUnit\":0}},\"Amount\":-5,\"TimeUnit\":0}},\"TimeUnit\":0}},\"UpperBound\":{\"DateSpan\":{\"Expression\":{\"Now\":{}},\"TimeUnit\":0}}}}}]}}}}]}}}",
+          "filters": "[]",
+          "height": 110.88,
+          "width": 275.26,
+          "x": 9.73,
+          "y": 0.00,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"a4ce270417fb113341b8\",\"layouts\":[{\"id\":0,\"position\":{\"x\":295.29622980251344,\"y\":0,\"z\":3000,\"width\":984.7037701974865,\"height\":692.8545780969479}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"施設.施設名\"},{\"queryRef\":\"日付.日付\"},{\"queryRef\":\"日付.潮\"},{\"queryRef\":\"Sum(釣果サマリ.海水温)\"},{\"queryRef\":\"Sum(釣果サマリ.入場者数)\"},{\"queryRef\":\"釣果サマリ.釣果コメント\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"施\",\"Entity\":\"施設\",\"Type\":0},{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0},{\"Name\":\"釣\",\"Entity\":\"サマリ\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"施\"}},\"Property\":\"施設名\"},\"Name\":\"施設.施設名\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"潮\"},\"Name\":\"日付.潮\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"釣\"}},\"Property\":\"海水温\"}},\"Function\":0},\"Name\":\"Sum(釣果サマリ.海水温)\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"釣\"}},\"Property\":\"入場者数\"}},\"Function\":0},\"Name\":\"Sum(釣果サマリ.入場者数)\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"釣\"}},\"Property\":\"釣果コメント\"},\"Name\":\"釣果サマリ.釣果コメント\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"total\":[{\"properties\":{\"totals\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}],\"columnWidth\":[{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"678.8684589347547D\"}}}},\"selector\":{\"metadata\":\"釣果サマリ.釣果コメント\"}}]}}}",
+          "filters": "[{\"name\":\"Filtercc4f4c2a92380862649a\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"サマリ\"}},\"Property\":\"釣果コメント\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"サ\",\"Entity\":\"サマリ\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"サ\"}},\"Property\":\"釣果コメント\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"null\"}}]]}}}}}]},\"type\":\"Categorical\",\"howCreated\":0,\"objects\":{\"general\":[{\"properties\":{\"isInvertedSelectionMode\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"isHiddenInViewMode\":false}]",
+          "height": 692.85,
+          "width": 984.70,
+          "x": 295.30,
+          "y": 0.00,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"adbfbccfe5968d282cf1\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":99.209726443769,\"z\":1000,\"width\":115.74468085106383,\"height\":115.74468085106383}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"施設.施設名\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"施\",\"Entity\":\"施設\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"施\"}},\"Property\":\"施設名\"},\"Name\":\"施設.施設名\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{}}]}}}",
+          "filters": "[]",
+          "height": 115.74,
+          "width": 115.74,
+          "x": 0.00,
+          "y": 99.21,
+          "z": 1000.00
+        }
+      ],
+      "width": 1280.00
+    },
+    {
+      "config": "{}",
+      "displayName": "サマリ",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "ReportSection69e6e0a91086f982d217",
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"0564189857f6b13a46cc\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":90.45592705167174,\"z\":2000,\"width\":149.7872340425532,\"height\":119.63525835866263}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"施設.施設名\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"施\",\"Entity\":\"施設\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"施\"}},\"Property\":\"施設名\"},\"Name\":\"施設.施設名\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{}}]}}}",
+          "filters": "[]",
+          "height": 119.64,
+          "width": 149.79,
+          "x": 0.00,
+          "y": 90.46,
+          "z": 2000.00
+        },
+        {
+          "config": "{\"name\":\"1ce5389c501c13779ff9\",\"layouts\":[{\"id\":0,\"position\":{\"x\":164.30879712746858,\"y\":210.26929982046678,\"z\":6000,\"width\":134.43447037701975,\"height\":487.18132854578096}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"魚種ターゲット.魚種\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"魚\",\"Entity\":\"狙い目\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"魚\"}},\"Property\":\"魚種\"},\"Name\":\"魚種ターゲット.魚種\"}]},\"drillFilterOtherVisuals\":true}}",
+          "filters": "[]",
+          "height": 487.18,
+          "width": 134.43,
+          "x": 164.31,
+          "y": 210.27,
+          "z": 6000.00
+        },
+        {
+          "config": "{\"name\":\"22603f28adc5c90d1a8f\",\"layouts\":[{\"id\":0,\"position\":{\"x\":314.8294434470377,\"y\":233.2495511669659,\"z\":5000,\"width\":537.737881508079,\"height\":233.2495511669659}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Y\":[{\"queryRef\":\"Sum(魚種別釣果.釣果数)\"}],\"Category\":[{\"queryRef\":\"日付.日付\",\"active\":true}],\"Series\":[{\"queryRef\":\"施設.施設名\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"魚\",\"Entity\":\"魚種釣果\",\"Type\":0},{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0},{\"Name\":\"施\",\"Entity\":\"施設\",\"Type\":0}],\"Select\":[{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"魚\"}},\"Property\":\"釣果数\"}},\"Function\":0},\"Name\":\"Sum(魚種別釣果.釣果数)\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"施\"}},\"Property\":\"施設名\"},\"Name\":\"施設.施設名\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'施設別、釣果数'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 233.25,
+          "width": 537.74,
+          "x": 314.83,
+          "y": 233.25,
+          "z": 5000.00
+        },
+        {
+          "config": "{\"name\":\"2ae9659184cf2cb93ae0\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":0,\"z\":0,\"width\":280.1215805471125,\"height\":90.45592705167174}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"日付.日付\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Relative'\"}}},\"relativeRange\":{\"expr\":{\"Literal\":{\"Value\":\"'Last'\"}}},\"relativeDuration\":{\"expr\":{\"Literal\":{\"Value\":\"4D\"}}},\"relativePeriod\":{\"expr\":{\"Literal\":{\"Value\":\"'Weeks'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Between\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}},\"LowerBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":1,\"TimeUnit\":0}},\"Amount\":-4,\"TimeUnit\":1}},\"TimeUnit\":0}},\"UpperBound\":{\"DateSpan\":{\"Expression\":{\"Now\":{}},\"TimeUnit\":0}}}}}]}}}}],\"dateRange\":[{\"properties\":{\"includeToday\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 90.46,
+          "width": 280.12,
+          "x": 0.00,
+          "y": 0.00,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"4e163a0cbe537dc0aaf5\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":210,\"width\":150,\"height\":479,\"z\":8000}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"狙い目.狙い目\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"狙\",\"Entity\":\"狙い目\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"狙\"}},\"Property\":\"狙い目\"},\"Name\":\"狙い目.狙い目\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"狙\",\"Entity\":\"狙い目\",\"Type\":0}],\"Where\":[{\"Condition\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"狙\"}},\"Property\":\"狙い目\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"'アジ'\"}}]]}}}]}}}}]}}}",
+          "filters": "[]",
+          "height": 479.00,
+          "width": 150.00,
+          "x": 0.00,
+          "y": 210.00,
+          "z": 8000.00
+        },
+        {
+          "config": "{\"name\":\"53e26f333bf4a008695a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":852.5673249551166,\"y\":44.811490125673245,\"z\":3000,\"width\":427.4326750448833,\"height\":674.4703770197486}}],\"singleVisual\":{\"visualType\":\"pivotTable\",\"projections\":{\"Rows\":[{\"queryRef\":\"日付.日付\",\"active\":true}],\"Values\":[{\"queryRef\":\"Sum(魚種別釣果.釣果数)\"}],\"Columns\":[{\"queryRef\":\"施設.施設名\",\"active\":true},{\"queryRef\":\"狙い目.狙い目\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"魚\",\"Entity\":\"魚種釣果\",\"Type\":0},{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0},{\"Name\":\"施\",\"Entity\":\"施設\",\"Type\":0},{\"Name\":\"狙\",\"Entity\":\"狙い目\",\"Type\":0}],\"Select\":[{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"魚\"}},\"Property\":\"釣果数\"}},\"Function\":1},\"Name\":\"Sum(魚種別釣果.釣果数)\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\",\"NativeReferenceName\":\"日付\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"施\"}},\"Property\":\"施設名\"},\"Name\":\"施設.施設名\",\"NativeReferenceName\":\"施設名\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"狙\"}},\"Property\":\"狙い目\"},\"Name\":\"狙い目.狙い目\",\"NativeReferenceName\":\"狙い目\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"expansionStates\":[{\"roles\":[\"Rows\"],\"levels\":[{\"queryRefs\":[\"日付.日付\"],\"isCollapsed\":true,\"isPinned\":true}],\"root\":{\"identityValues\":null}}],\"columnProperties\":{\"Sum(魚種別釣果.釣果数)\":{\"displayName\":\"釣果数\"},\"Sum(魚種別釣果.魚種サイズ最小)\":{\"displayName\":\"サイズ最小\"},\"Sum(魚種別釣果.魚種サイズ最大)\":{\"displayName\":\"サイズ最大\"}},\"drillFilterOtherVisuals\":true,\"objects\":{\"subTotals\":[{\"properties\":{\"rowSubtotals\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}},\"columnSubtotals\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}],\"columnHeaders\":[{\"properties\":{\"wordWrap\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"urlIcon\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"9D\"}}},\"outlineStyle\":{\"expr\":{\"Literal\":{\"Value\":\"0L\"}}}}}],\"columnWidth\":[{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"98.90878067930073D\"}}}},\"selector\":{\"metadata\":\"魚種別釣果.魚種\"}}],\"general\":[{\"properties\":{\"layout\":{\"expr\":{\"Literal\":{\"Value\":\"'Tabular'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 674.47,
+          "width": 427.43,
+          "x": 852.57,
+          "y": 44.81,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"8a2dde1f55a989fe8c32\",\"layouts\":[{\"id\":0,\"position\":{\"x\":164.30879712746858,\"y\":90.77199281867145,\"z\":1000,\"width\":140.1795332136445,\"height\":99.9640933572711}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"日付.平日、休日\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"平日、休日\"},\"Name\":\"日付.平日、休日\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{}}]}}}",
+          "filters": "[]",
+          "height": 99.96,
+          "width": 140.18,
+          "x": 164.31,
+          "y": 90.77,
+          "z": 1000.00
+        },
+        {
+          "config": "{\"name\":\"b75874dad5bf7c3c1fbd\",\"layouts\":[{\"id\":0,\"position\":{\"x\":314.8294434470377,\"y\":476.84021543985637,\"z\":7000,\"width\":548.0789946140036,\"height\":233.2495511669659}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Category\":[{\"queryRef\":\"日付.日付\",\"active\":true}],\"Y\":[{\"queryRef\":\"CountNonNull(魚種釣果.サイズ最大)\"},{\"queryRef\":\"Sum(魚種釣果.サイズ最小)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0},{\"Name\":\"魚\",\"Entity\":\"魚種釣果\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"魚\"}},\"Property\":\"サイズ最大\"}},\"Function\":1},\"Name\":\"CountNonNull(魚種釣果.サイズ最大)\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"魚\"}},\"Property\":\"サイズ最小\"}},\"Function\":1},\"Name\":\"Sum(魚種釣果.サイズ最小)\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"columnProperties\":{\"Sum(魚種釣果.魚種サイズ最大)\":{\"displayName\":\"サイズ最大\"},\"Sum(魚種釣果.魚種サイズ最小)\":{\"displayName\":\"サイズ最小\"}},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"vcObjects\":{\"general\":[{\"properties\":{\"altText\":{\"expr\":{\"Literal\":{\"Value\":\"''\"}}}}}],\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'サイズ'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 233.25,
+          "width": 548.08,
+          "x": 314.83,
+          "y": 476.84,
+          "z": 7000.00
+        },
+        {
+          "config": "{\"name\":\"fbb7b2429b82bd3c1489\",\"layouts\":[{\"id\":0,\"position\":{\"x\":304.4883303411131,\"y\":0,\"z\":4000,\"width\":548.0789946140036,\"height\":233.2495511669659}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Y\":[{\"queryRef\":\"Sum(魚種別釣果.釣果数)\"}],\"Series\":[{\"queryRef\":\"魚種別釣果.魚種\"}],\"Category\":[{\"queryRef\":\"日付.日付\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"魚\",\"Entity\":\"魚種釣果\",\"Type\":0},{\"Name\":\"日\",\"Entity\":\"日付\",\"Type\":0}],\"Select\":[{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"魚\"}},\"Property\":\"釣果数\"}},\"Function\":0},\"Name\":\"Sum(魚種別釣果.釣果数)\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"魚\"}},\"Property\":\"魚種\"},\"Name\":\"魚種別釣果.魚種\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"},\"Name\":\"日付.日付\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"日\"}},\"Property\":\"日付\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'魚種 別、釣果数'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 233.25,
+          "width": 548.08,
+          "x": 304.49,
+          "y": 0.00,
+          "z": 4000.00
+        }
+      ],
+      "width": 1280.00
+    }
+  ]
+}

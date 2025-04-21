@@ -1,0 +1,39 @@
+relationship f058fcbf-7ba0-41f0-8a17-11a617a6a594
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 速報.時刻
+	toColumn: LocalDateTable_1c20fe1d-f650-4ec4-aa9a-01d9e0fb4ba5.Date
+
+relationship c670bef4-e4ff-4e3d-9016-a7d903116ca7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 日付.日付
+	toColumn: LocalDateTable_bda5063f-b38a-4b1c-94f8-b3bee0eabdb2.Date
+
+relationship a2b5b5b4-8161-46e8-9df9-0b152d65147f
+	fromColumn: 速報.日付
+	toColumn: 日付.日付
+
+relationship 9292d257-00f2-4921-b843-2ae773c061b5
+	fromColumn: サマリ.日付
+	toColumn: 日付.日付
+
+relationship c9da5090-4a0f-431b-ba5a-045ca20d4cf0
+	fromColumn: 魚種釣果.日付
+	toColumn: 日付.日付
+
+relationship 27761ed0-58b9-4670-998a-c627c2c16695
+	toCardinality: many
+	fromColumn: 魚種釣果.魚種
+	toColumn: 狙い目.魚種
+
+relationship 4aa24b28-f3d5-445e-b5a6-7ec4548a14cd
+	fromColumn: サマリ.施設ID
+	toColumn: 施設.施設ID
+
+relationship 16f8464e-38aa-4ed4-9931-d887cafd88bd
+	fromColumn: 速報.施設ID
+	toColumn: 施設.施設ID
+
+relationship b66fcc00-c571-4459-ab91-83f86f66cfad
+	fromColumn: 魚種釣果.施設ID
+	toColumn: 施設.施設ID
+

@@ -72,7 +72,10 @@ class Parser():
                     Converter.get_header(content_weather.text, headers)
                 for content_other in content_others:
                     Converter.get_header(content_other.text, headers)
-                self.comment = self.comment.append(headers, ignore_index=True)
+                self.comment = self.comment.append(
+                    headers, 
+                    ignore_index=True
+                )
 
                 rows = content.find_all('tr')
                 df = pd.DataFrame(columns=config.header_choka)
@@ -84,7 +87,10 @@ class Parser():
                     item_texts = list(map(lambda x: x.text, html_items))
                     Converter.get_choka_table_value(item_texts.pop(0), values)
                     Converter.get_choka_table_value(item_texts.pop(0), values)
-                    self.choka = self.choka.append(values, ignore_index=True)
+                    self.choka = self.choka.append(
+                        values, 
+                        ignore_index=True
+                    )
 
             else:
                 """各時間の釣果ニュースラインを抽出"""
@@ -92,7 +98,10 @@ class Parser():
                 if content_weather:
                     Converter.get_header(content_weather.text, values)
                 Converter.get_comment(content_foot.text, values)
-                self.newsline = self.newsline.append(values, ignore_index=True)
+                self.newsline = self.newsline.append(
+                    values, 
+                    ignore_index=True
+                )
         return self
 
     def get_timestamps(self):

@@ -9,7 +9,7 @@ def test_get_path():
     assert Config.get_datastore_path("choka.csv")
     assert Config.get_download_path("choka_daikoku_2021_04_001.html")
     assert Config.test_resource("daikoku1.html")
-    assert Config.get_url("daikoku")
+    assert Config.get_url()
     assert Config.get_download_file("daikoku", 2021,4)
     assert Config.get_db_path()
     assert Config.get_config_path("config.toml")
@@ -29,5 +29,8 @@ def test_toml_multibyte():
             target_name = target['name']
             for species in target['species']:
                 values = {'Target': target_name, 'Species': species}
-                df = df.append(values, ignore_index=True)
+                df = pd.concat(
+                    [df, pd.DataFrame([values])],
+                    ignore_index=True
+                )
     print(df)

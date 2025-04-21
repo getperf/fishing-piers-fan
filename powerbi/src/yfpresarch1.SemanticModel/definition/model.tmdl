@@ -1,0 +1,28 @@
+model Model
+	culture: ja-JP
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: ja-JP
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBIDesktopVersion = 2.141.1754.0 (25.03)+e4409ed908ce97a5e9747f7dc48da475cf1c71a2
+
+annotation PBI_QueryOrder = ["サマリ","速報","魚種釣果","日付","狙い目","施設"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table サマリ
+ref table DateTableTemplate_ad4ee0fe-29e8-4b8d-b2f2-b072e1fd1afd
+ref table 速報
+ref table LocalDateTable_1c20fe1d-f650-4ec4-aa9a-01d9e0fb4ba5
+ref table 魚種釣果
+ref table 日付
+ref table LocalDateTable_bda5063f-b38a-4b1c-94f8-b3bee0eabdb2
+ref table 狙い目
+ref table 施設
+
+ref cultureInfo ja-JP
+

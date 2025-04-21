@@ -1,0 +1,58 @@
+table 日付
+	lineageTag: d7f4a879-9fa2-46e1-8108-73e7426474e9
+
+	column 日付
+		dataType: dateTime
+		formatString: mm/dd
+		lineageTag: 6fb82b09-7ff4-499f-a9eb-4519c12e9675
+		summarizeBy: none
+		sourceColumn: 日付
+
+		variation バリエーション
+			isDefault
+			relationship: c670bef4-e4ff-4e3d-9016-a7d903116ca7
+			defaultHierarchy: LocalDateTable_bda5063f-b38a-4b1c-94f8-b3bee0eabdb2.日付の階層
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column 潮
+		dataType: string
+		lineageTag: d4c0528b-eef5-452c-8e6d-b13fbf8f621d
+		summarizeBy: none
+		sourceColumn: 潮
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 平日、休日
+		dataType: string
+		lineageTag: 03735fce-931b-46c4-a135-6c780798cc5e
+		summarizeBy: none
+		sourceColumn: 平日、休日
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	partition 日付-c07c30f0-a64f-419f-ace0-ab2eb7c71c25 = m
+		mode: import
+		source =
+				let
+				    ソース = Odbc.DataSource("database=c:\home\python\yfp\fishing-piers-fan\data\fishing_result.db;dsn=SQLite3 Datasource", [HierarchicalNavigation=true]),
+				    fishing_comments_Table = ソース{[Name="fishing_comments",Kind="Table"]}[Data],
+				    削除された他の列 = Table.SelectColumns(fishing_comments_Table,{"Date", "Tide", "BizDay"}),
+				    変更された型 = Table.TransformColumnTypes(削除された他の列,{{"Date", type date}}),
+				    削除された重複 = Table.Distinct(変更された型, {"Date"}),
+				    #"名前が変更された列 " = Table.RenameColumns(削除された重複,{{"Date", "日付"}, {"Tide", "潮"}, {"BizDay", "平日、休日"}})
+				in
+				    #"名前が変更された列 "
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = ナビゲーション
+

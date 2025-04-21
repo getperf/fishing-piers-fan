@@ -39,17 +39,17 @@ class Datastore:
                 dict(index=0, Date="", Point="", Species="", 
                     Count=0.0, SizeMin=0.0, SizeMax=0.0, 
                     WeightMin=0.0, WeightMax=0.0, Comment="", Place=""),
-                'choka.csv'),
+                'choka'),
             Table('fishing_comments', 
                 ['Date', 'Point'], 
                 dict(index=0, Date="", Point="", Weather="", 
                     WaterTemp=0.0, Quantity=0.0, 
                     Comment="", Tide="", Time="", Summary="", BizDay=""),
-                'comment.csv'),
+                'comment'),
             Table('fishing_newslines', 
                 ['Date', 'Time', 'Point'], 
                 dict(index=0, Date="", Time="", Point="", Comment="", Weather=""),
-                'newsline.csv'),
+                'newsline'),
         ]
         self.load_counts = dict()
 
@@ -143,14 +143,15 @@ class Datastore:
         else:
             table.insert(values)
 
-    def append_load(self, csv, table_name, index_columns):
+    def append_load(self, csv_file, table_name, index_columns):
         """
         テーブルに全 CSV レコードを登録します、既設のレコードは更新します
         """
-        results = pd.read_csv(Config.get_datastore_path(csv), index_col=0)
+        csv_path = Config.get_datastore_path(csv_file)
+        results = pd.read_csv(csv_path)
         for result in results.to_dict(orient='records'):
             self.upsert_row(table_name, index_columns, result)
-        self.load_counts[csv] = len(results.index)
+        self.load_counts[csv_file] = len(results.index)
         return self
 
     def append_loads(self):
@@ -158,7 +159,9 @@ class Datastore:
         各テーブルに全 CSV レコードを登録します、既設のレコードは更新します
         """
         for table in self.tables:
-            self.append_load(table.csv, table.table_name, table.index_columns)
+            for facility in Config.get_facilities():
+                csv_file = Config.get_csv(table.csv, facility)
+                self.append_load(csv_file, table.table_name, table.index_columns)
         _logger.info("upsert load : {}".format(self.load_counts))
         return self
 

@@ -2,6 +2,7 @@ import os
 import re
 import logging
 import datetime
+import sqlite3
 import toml
 import pandas as pd
 import dataset as ds
@@ -23,7 +24,8 @@ class MasterLoader:
         SQLite3 データベースへの接続と、各モデル定義を初期化します
         """
         self.db_path = Config.get_db_path(db_name)
-        self.db = ds.connect('sqlite:///{}'.format(self.db_path))
+        # self.db = sqlite3.connect('sqlite:///{}'.format(self.db_path))
+        self.db = sqlite3.connect(self.db_path)
         self.target = pd.DataFrame(columns=['Target', 'Species'])
         self.area = pd.DataFrame(columns=['Point', 'PointName'])
 
@@ -40,14 +42,24 @@ class MasterLoader:
                 target_name = target['name']
                 for species in target['species']:
                     values = {'Target': target_name, 'Species': species}
-                    self.target = self.target.append(values, ignore_index=True)
+                    self.target = pd.concat(
+                        [self.target, pd.DataFrame([values])],
+                        ignore_index=True
+                    )
 
         """魚種ターゲットの読み込み"""
         if 'area' in config_toml:
             areas = config_toml['area']
             for area in areas:
-                values = {'Point': area['name'], 'PointName': area['label']}
-                self.area = self.area.append(values, ignore_index=True)
+                values = {
+                    'Point': area['name'],
+                    'PointName': area['label']
+                }
+                new_row_df = pd.DataFrame([values])  # 新しい行をDataFrameに変換
+                self.area = pd.concat(
+                    [self.area, new_row_df],
+                    ignore_index=True
+                )
 
         return self
 
@@ -62,9 +74,9 @@ class MasterLoader:
         テーブルを作成し、データフレームをロード(上書き更新)します
         """
         if len(self.target) > 0:
-            self.target.to_sql("fishing_target", self.db.engine, if_exists="replace")
+            self.target.to_sql("fishing_target", self.db, if_exists="replace")
         if len(self.area) > 0:
-            self.area.to_sql("fishing_area", self.db.engine, if_exists="replace")
+            self.area.to_sql("fishing_area", self.db, if_exists="replace")
 
     def run(self):
         """

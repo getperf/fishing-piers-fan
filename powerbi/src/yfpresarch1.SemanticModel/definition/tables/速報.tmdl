@@ -1,0 +1,94 @@
+table 速報
+	lineageTag: 60edd87c-befa-4747-84db-4a938ab15d92
+
+	column 時刻
+		dataType: dateTime
+		formatString: hh:nn
+		lineageTag: 03a13daa-16f8-4be9-a949-f027cf36e863
+		summarizeBy: none
+		sourceColumn: 時刻
+
+		variation バリエーション
+			isDefault
+			relationship: f058fcbf-7ba0-41f0-8a17-11a617a6a594
+			defaultHierarchy: LocalDateTable_1c20fe1d-f650-4ec4-aa9a-01d9e0fb4ba5.日付の階層
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column コメント
+		dataType: string
+		lineageTag: 20ff48e6-ec7e-4d93-a21f-53569ec3f9aa
+		summarizeBy: none
+		sourceColumn: コメント
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 天気
+		dataType: string
+		lineageTag: 89b236c7-8bcc-450f-a1aa-2b785f409822
+		summarizeBy: none
+		sourceColumn: 天気
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 日付
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: a6e4e3c2-be88-4ee2-8c4c-f9b69ac95719
+		summarizeBy: none
+		sourceColumn: 日付
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 施設ID
+		dataType: string
+		isHidden
+		lineageTag: 5eb7d2ea-f97b-4750-bf39-e520c1a6d2c9
+		summarizeBy: none
+		sourceColumn: 施設ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column id
+		dataType: double
+		lineageTag: 8fc8f606-4b5e-4405-9499-7342ead2cb44
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 速報-b00b7320-9b21-4034-883f-3e0a58861794 = m
+		mode: import
+		source =
+				let
+				    ソース = Odbc.DataSource("database=c:\home\python\yfp\fishing-piers-fan\data\fishing_result.db;dsn=SQLite3 Datasource", [HierarchicalNavigation=true, SqlCapabilities=[LimitClauseKind=LimitClauseKind.Limit]]),
+				    fishing_newslines_Table = ソース{[Name="fishing_newslines",Kind="Table"]}[Data],
+				    削除された列 = Table.RemoveColumns(fishing_newslines_Table,{"index"}),
+				    変更された型 = Table.TransformColumnTypes(削除された列,{{"Date", type date}}),
+				    #"名前が変更された列 " = Table.RenameColumns(変更された型,{{"Date", "日付"}}),
+				    変更された型1 = Table.TransformColumnTypes(#"名前が変更された列 ",{{"Time", type datetime}}),
+				    #"名前が変更された列 1" = Table.RenameColumns(変更された型1,{{"Time", "時刻"}, {"Point", "施設ID"}, {"Comment", "コメント"}, {"Weather", "天気"}})
+				in
+				    #"名前が変更された列 1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = ナビゲーション
+

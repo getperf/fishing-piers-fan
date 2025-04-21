@@ -117,7 +117,7 @@ class Converter:
 
         """箇条書きで始まる箇所からそれ以降の文は除く"""
         comment = unicodedata.normalize("NFC", comment)
-        lines = re.split(r'[【■★※＊]', comment)
+        lines = re.split(r'[【■◆★※＊]', comment)
         if lines:
             comment = lines[0]
 
@@ -143,8 +143,8 @@ class Converter:
         """
         釣果サマリコメントから不要な文を取り除く
         """
-        comment = unicodedata.normalize("NFC", comment)
-        lines = re.split(r'[【■★※＊]', comment)
+        # comment = unicodedata.normalize("NFC", comment)
+        lines = re.split(r'[【■◆★※＊]', comment)
         if lines:
             comment = lines[0]
 
@@ -157,7 +157,7 @@ class Converter:
             if re.search(r'本日(.+)ご来場', line):
                 # print("HIT1")
                 continue
-            elif re.search(r'(おはよう|交通|営業時間|ご来場|急激に暗く|カード|駐車|予約|受付|入場)', line):
+            elif re.search(r'(おはよう|ご利用|キッチンカー|交通|営業時間|ご来場|急激に暗く|カード|駐車|予約|受付|入場)', line):
                 continue
             else:
                 comment2 += line + "。"

@@ -1,0 +1,39 @@
+table 施設
+	lineageTag: 169df4dc-b0d0-46ca-a0f1-d803085cdcd9
+
+	column 施設ID
+		dataType: string
+		lineageTag: 278f2d99-9100-48a6-bf30-58e9aa9ded10
+		summarizeBy: none
+		sourceColumn: 施設ID
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	column 施設名
+		dataType: string
+		lineageTag: 10a613d3-ed44-48bc-ac01-249d922f6a0d
+		summarizeBy: none
+		sourceColumn: 施設名
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isText":true}
+
+	partition 施設-0f0e32fb-9a5b-4974-b079-9fa4ecfa6270 = m
+		mode: import
+		source =
+				let
+				    ソース = Odbc.DataSource("database=c:\home\python\yfp\fishing-piers-fan\data\fishing_result.db;dsn=SQLite3 Datasource", [HierarchicalNavigation=true, SqlCapabilities=[LimitClauseKind=LimitClauseKind.Limit]]),
+				    fishing_area_Table = ソース{[Name="fishing_area",Kind="Table"]}[Data],
+				    削除された列 = Table.RemoveColumns(fishing_area_Table,{"index"}),
+				    削除された重複 = Table.Distinct(削除された列, {"Point"}),
+				    #"名前が変更された列 " = Table.RenameColumns(削除された重複,{{"Point", "施設ID"}, {"PointName", "施設名"}})
+				in
+				    #"名前が変更された列 "
+
+	annotation PBI_NavigationStepName = ナビゲーション
+
+	annotation PBI_ResultType = Table
+

@@ -23,7 +23,7 @@ def test_get_choka_db():
 
 def test_reset_loadfile():
     datastore = Datastore(TEST_DB).reset_load_files()
-    assert datastore.load_counts == {'choka.csv': 0, 'comment.csv': 0, 'newsline.csv': 0}
+    assert datastore.load_counts == {'choka': 0, 'comment': 0, 'newsline': 0}
 
 @pytest.mark.skipif(sys.platform == 'win32',
                     reason="does not run on windows")
@@ -33,7 +33,7 @@ def test_initial_export():
     parser = Parser("daikoku").parse_html(html_path)
     parser.export('csv')
     datastore.csv_import()
-    assert datastore.load_counts == {'choka.csv': 12, 'comment.csv': 1, 'newsline.csv': 9}
+    assert datastore.load_counts == {'choka': 12, 'comment': 1, 'newsline': 9}
 
 
 @pytest.mark.skipif(sys.platform == 'win32',
@@ -47,9 +47,9 @@ def test_append_load():
     parser2 = Parser("isogo").parse_html(Config.test_resource("isogo1.html"))
     parser2.export('csv')
     datastore.csv_import()
-    assert datastore.load_counts['choka.csv'] == 19
+    assert datastore.load_counts['choka'] == 19
 
     parser3 = Parser("honmoku").parse_html(Config.test_resource("honmoku1.html"))
     parser3.export('csv')
     datastore.csv_import()
-    assert datastore.load_counts['choka.csv'] == 54
+    assert datastore.load_counts['choka'] == 54
