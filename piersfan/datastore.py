@@ -147,6 +147,7 @@ class Datastore:
         """
         テーブルに全 CSV レコードを登録します、既設のレコードは更新します
         """
+        self.create_indexes()
         csv_path = Config.get_datastore_path(csv_file)
         results = pd.read_csv(csv_path)
         for result in results.to_dict(orient='records'):
